@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="zh">
+    <head>
+        <title>售票核实系统-监控视频列表</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="css/main.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="header">
+            <h1>欢迎进入售票核实系统</h1>
+            <p id="version">版本：1.0</p>
+            <p id="line">________________________________________________</p>
+        </div>
+        <div id="date">
+            <form action="">
+                <label for="datePicker">请选择需要核实车次的日期：</label>
+                <input id="datePicker" type="date" name="date" min="2014-11-24"/>
+                <script>
+                    document.getElementById('datePicker').value = new Date().toISOString().substring(0, 10);
+                </script>
+                <input class="btn" type="submit" value="确定">
+            </form>
+        </div>
+        <div id="busLineList">
+            <table id="listTable">
+                <tr>
+                    <th>班 次</th>
+                    <th>状 态</th>
+                    <th>核实人</th>
+                    <th>核 实</th>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

@@ -15,7 +15,7 @@ and open the template in the editor.
 
 body {
     font: 16px Arial, Helvetica, cans-serif;
-    background-color: #cccccc;
+    background-color: #dddddd;
 }
 
 #version {
@@ -25,10 +25,16 @@ body {
 }
 
 #header {
+    width: 500px;
     color: #0033ff;
     display: block;
     margin-top: 10px;
     margin-left: 10px;
+}
+
+#header>#line {
+    width: 500px;
+    color: #b3b3b3;
 }
 
 #main_entrance {
@@ -41,6 +47,37 @@ body {
 #main_entrance p {
     color: #0033ff;
     margin: 5px;
+}
+
+#datepicker {
+    width: 800px;
+    margin-left: 50px;
+    margin-top: 10px;
+    color: #0033ff;
+}
+
+#busLineList {
+    margin-top: 10px;
+    margin-left: 5px;
+    width: 800px;
+}
+
+#listTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#listTable th, #listTable td {
+    border: 1px solid #98bf21;
+    padding: 3px 7px 2px 7px;
+}
+
+#listTable th {
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: #A7C942;
+    color: #ffffff;
 }
 
 .btn-large {

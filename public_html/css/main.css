@@ -43,9 +43,10 @@ body {
 
 #main_entrance {
     width: 500px;
-    margin: 200px;
+    margin-top: 100px;
+    margin-left: 200px;
     display: block;
-    padding: 10px;
+    padding: 20px;
 }
 
 #main_entrance p {
@@ -65,6 +66,10 @@ body {
     margin-top: 10px;
     margin-left: 10px;
     padding: 5px;
+}
+
+#submitbtn {
+    float: right;
 }
 
 #busLineList {

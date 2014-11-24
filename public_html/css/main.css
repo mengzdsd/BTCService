@@ -54,15 +54,22 @@ body {
 }
 
 #datepicker {
-    width: 800px;
+    width: 380px;
     margin-left: 50px;
     margin-top: 10px;
     color: #0033ff;
 }
 
+#date{
+    width: 450px;
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 5px;
+}
+
 #busLineList {
     margin-top: 10px;
-    margin-left: 5px;
+    margin-left: 10px;
     width: 800px;
 }
 

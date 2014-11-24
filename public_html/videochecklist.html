@@ -10,6 +10,64 @@ and open the template in the editor.
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="css/main.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="js/xmlhandler.js"></script>
+        <script type="text/javascript">
+            function submitDate() {
+//               window.location.reload();
+                var bllEl = document.getElementById('busLineList');
+                var selDate = document.getElementById('datePicker').value;
+                var dateText = "日期： " + selDate.toString();
+                bllEl.getElementsByTagName('p')[0].innerHTML = dateText;
+                
+                var xmldocName = "linedata/20141121/粤B1T34K2014112101.xml";
+//                var xmldocName = "linedata/20141121/测试.xml";
+                if (window.XMLHttpRequest) {
+                    xmlhttp = new XMLHttpRequest();
+                } else {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xmlhttp.open("GET",xmldocName,false);
+                xmlhttp.send();
+                xmlDoc=xmlhttp.responseXML;
+                if (xmlDoc === null) {
+                    window.alert("null");
+                } else {
+                    // window.alert("Ok");
+//                    var secP = document.createElement('p');
+//                    secP.innerHTML = xmlDoc.getElementsByTagName('Id')[0].childNodes[0].nodeValue;
+//                    bllEl.appendChild(secP);  
+                    var info = readData(xmlDoc);
+                    var lineId = info[0];
+                    var lineStatus = info[1];
+                    var lineChecker = info[2];
+                
+                    var trNode = document.createElement('tr');
+                    var tdNode1 = document.createElement('td');
+                    tdNode1.innerHTML = lineId;
+                    trNode.appendChild(tdNode1);
+                    var tdNode2 = document.createElement('td');
+                    var tdNode3 = document.createElement('td');
+                    if (lineStatus === true) {
+                        tdNode2.innerHTML = "已核实";
+                        tdNode3.innerHTML = lineChecker;
+                    } else {
+                        tdNode2.innerHTML = "未核实";
+                        tdNode3.innerHTML = "";
+                    }
+                    trNode.appendChild(tdNode2);
+                    trNode.appendChild(tdNode3);
+                    var tdNode4 = document.createElement('td');
+                    var btnNode = document.createElement('button');
+                    btnNode.setAttribute("class","btn");
+                    btnNode.setAttribute("onclick","checkLine(this)");
+                    btnNode.innerHTML = lineStatus ? "重核实" : "核实";
+                    tdNode4.appendChild(btnNode);
+                    trNode.appendChild(tdNode4);
+                    document.getElementById('listTable').appendChild(trNode);                   
+                }
+
+            }
+        </script>
     </head>
     <body>
         <div id="header">
@@ -21,16 +79,18 @@ and open the template in the editor.
             <p id="line">________________________________________________</p>
         </div>
         <div id="date">
+            <button id="submitbtn" class="btn" onclick="submitDate()">确 定</button>
             <form action="">
                 <label for="datePicker">请选择需要核实车次的日期：</label>
-                <input id="datePicker" type="date" name="date" min="2014-11-24"/>
-                <script>
+                <input id="datePicker" type="date" name="date" min="2014-11-21"/>
+<!--                <script>
                     document.getElementById('datePicker').value = new Date().toISOString().substring(0, 10);
-                </script>
-                <input class="btn" type="submit" value="确定">
+                </script>-->
+<!--                <input class="btn" type="submit" value="确定">-->
             </form>
         </div>
         <div id="busLineList">
+            <p></p>
             <table id="listTable">
                 <tr>
                     <th>班 次</th>
@@ -40,5 +100,13 @@ and open the template in the editor.
                 </tr>
             </table>
         </div>
+        <!--            <table id="listTable">
+                <tr>
+                    <th>班 次</th>
+                    <th>状 态</th>
+                    <th>核实人</th>
+                    <th>核 实</th>
+                </tr>
+            </table>-->
     </body>
 </html>

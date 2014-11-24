@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BusLine xmlns="http://www.mapao.com/projects/buscheck/">
+<BusLine>
 	<!-- 班次信息 -->
 	<Id>粤B1T34K2014112101</Id>
 	<!-- 起点站 -->
 	<StartStation>虎门中心站</StartStation>
 	<!-- 终点站 -->
-	<EndStartion>南头检查站</EndStation>
+	<EndStation>南头检查站</EndStation>
 	<Date>20141121</Date>
 	<StartTime>08:45:00</StartTime>
 	<StopTime>10:12:00</StopTime>

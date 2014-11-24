@@ -4,34 +4,33 @@
  * and open the template in the editor.
  */
 
-function getXHttp() {
-    if (window.ActiveXObject) {
-        xhttp = new ActiveXObject("Msxml2.XMLHTTP");
+//function checkFolder(path) {
+//    var xhttp = getXHttp();
+//    try {
+//        xhttp.open("GET", path, false);
+//    } catch(err) {
+//        return err.toString();
+//    }
+//    xhttp.send();
+//    return xhttp.responseText.toString();
+//}
+
+function readData(xmldoc) {
+    var lineId = xmldoc.getElementsByTagName("Id")[0].childNodes[0].nodeValue;
+//    var lineId = xmldoc.getElementById('id').nodeValue;
+    var status;
+    if (xmldoc.getElementById('check')) {
+        status = true;
     } else {
-        xhttp = new XMLHttpRequest();
+        status = false;
+    }
+    var checker;
+    if (xmldoc.getElementById('checker')) {
+        checker = xmldoc.getElementById('checker').nodeValue;
+    } else {
+        checker = null;
     }
     
-    return xhttp;
-}
-
-function loadXMLDoc(filename) {
-    var xhttp = getXHttp();
-    
-    xhttp.open("GET", filename, false);
-    try {
-        xhttp.responseType = "msxml-document";
-    } catch(err) {} // helping IE11
-    xhttp.send();
-    return xhttp.responseXML;
-}
-
-function checkFolder(path) {
-    var xhttp = getXHttp();
-    try {
-        xhttp.open("GET", path, false);
-    } catch(err) {
-        return err.toString();
-    }
-    xhttp.send();
-    return xhttp.responseText.toString();
+    var arr = [lineId, status, checker];
+    return arr;
 }

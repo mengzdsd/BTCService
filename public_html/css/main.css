@@ -37,6 +37,10 @@ body {
     color: #b3b3b3;
 }
 
+#header a {
+    float: right;
+}
+
 #main_entrance {
     width: 500px;
     margin: 200px;

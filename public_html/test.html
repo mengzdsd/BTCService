@@ -9,13 +9,13 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--        <script type="text/javascript" language="JavaScript">
-            var numberOfFiles = 0;
-            var filesList = new Array();
-            var cDate = "20141121";
-        </script>
-        <script type="text/javascript" language="JavaScript" src="cgi-bin/checkData.cgi?20141121">
-        </script>-->
+        <!--        <script type="text/javascript" language="JavaScript">
+                    var numberOfFiles = 0;
+                    var filesList = new Array();
+                    var cDate = "20141121";
+                </script>
+                <script type="text/javascript" language="JavaScript" src="cgi-bin/checkData.cgi?20141121">
+                </script>-->
         <script type="text/javascript" language="JavaScript">
             function display() {
                 if (window.XMLHttpRequest) {
@@ -23,27 +23,34 @@ and open the template in the editor.
                 } else {
                     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                var cgiScript = "/cgi-bin/checkflielist.cgi?20141121";
-                xmlhttp.open("GET",cgiScript,false);
+                var cgiScript = "/cgi-bin/checklinedatafiles.cgi?20141121&粤B1T34K";
+                xmlhttp.open("GET", cgiScript, false);
                 xmlhttp.send();
-                xmlDoc=xmlhttp.responseXML;
+                xmlDoc = xmlhttp.responseXML;
                 if (xmlDoc === null) {
                     window.alert("null");
                 } else {
                     var pElement = document.createElement('p');
                     var numberOfFiles = xmlDoc.documentElement.getAttribute('number');
                     pElement.innerHTML = "The number of files is: " + numberOfFiles;
-                    var ulElement = document.createElement('ul');
-                    var fileNodes = xmlDoc.getElementsByTagName('file');
-                    for (var i = 0; i < fileNodes.length; i++) {
-                        var liElement = document.createElement('li');
-                        liElement.innerHTML = fileNodes.item(i).childNodes[0].nodeValue;
-                        ulElement.appendChild(liElement);
+                    if (numberOfFiles !== 0) {
+                        var ulElement = document.createElement('ul');
+                        var fileNodes = xmlDoc.getElementsByTagName('file');
+                        for (var i = 0; i < fileNodes.length; i++) {
+                            var lineId = fileNodes.item(i).getElementsByTagName('name').item(0).childNodes[0].nodeValue;
+                            var checked = fileNodes.item(i).getElementsByTagName('status').item(0).childNodes[0].nodeValue;
+                            var checker = fileNodes.item(i).getElementsByTagName('checker').item(0).childNodes[0].nodeValue;
+                            var liElement = document.createElement('li');
+                            liElement.innerHTML = lineId + ":" + checked + ":" + checker;
+                            ulElement.appendChild(liElement);
+                        }
+                        document.getElementById('body').appendChild(pElement);
+                        document.getElementById('body').appendChild(ulElement);
+                    } else {
+                        document.getElementById('body').appendChild(pElement);
                     }
-                    document.getElementById('body').appendChild(pElement);
-                    document.getElementById('body').appendChild(ulElement);
                 }
-                    
+
             }
         </script>
     </head>

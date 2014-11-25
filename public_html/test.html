@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--        <script type="text/javascript" language="JavaScript">
+            var numberOfFiles = 0;
+            var filesList = new Array();
+            var cDate = "20141121";
+        </script>
+        <script type="text/javascript" language="JavaScript" src="cgi-bin/checkData.cgi?20141121">
+        </script>-->
+        <script type="text/javascript" language="JavaScript">
+            function display() {
+                if (window.XMLHttpRequest) {
+                    xmlhttp = new XMLHttpRequest();
+                } else {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                var cgiScript = "/cgi-bin/checkflielist.cgi?20141121";
+                xmlhttp.open("GET",cgiScript,false);
+                xmlhttp.send();
+                xmlDoc=xmlhttp.responseXML;
+                if (xmlDoc === null) {
+                    window.alert("null");
+                } else {
+                    var pElement = document.createElement('p');
+                    var numberOfFiles = xmlDoc.documentElement.getAttribute('number');
+                    pElement.innerHTML = "The number of files is: " + numberOfFiles;
+                    var ulElement = document.createElement('ul');
+                    var fileNodes = xmlDoc.getElementsByTagName('file');
+                    for (var i = 0; i < fileNodes.length; i++) {
+                        var liElement = document.createElement('li');
+                        liElement.innerHTML = fileNodes.item(i).childNodes[0].nodeValue;
+                        ulElement.appendChild(liElement);
+                    }
+                    document.getElementById('body').appendChild(pElement);
+                    document.getElementById('body').appendChild(ulElement);
+                }
+                    
+            }
+        </script>
+    </head>
+    <body id="body">
+        <div onclick="display()">TODO write content</div>
+    </body>
+</html>

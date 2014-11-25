@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<BusLine>
+	<!-- 班次信息 -->
+	<Id>粤B1T34K2014112101</Id>
+	<!-- 起点站 -->
+	<StartStation>虎门中心站</StartStation>
+	<!-- 终点站 -->
+	<EndStation>南头检查站</EndStation>
+</Busline>

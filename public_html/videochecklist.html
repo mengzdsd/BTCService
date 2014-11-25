@@ -18,17 +18,22 @@ and open the template in the editor.
                 var selDate = document.getElementById('datePicker').value;
                 var dateText = "日期： " + selDate.toString();
                 bllEl.getElementsByTagName('p')[0].innerHTML = dateText;
-                
-                var xmldocName = "linedata/20141121/粤B1T34K2014112101.xml";
+
+//                var xmldocName = "linedata/20141121/粤B1T34K2014112101.xml";
 //                var xmldocName = "linedata/20141121/测试.xml";
                 if (window.XMLHttpRequest) {
                     xmlhttp = new XMLHttpRequest();
                 } else {
                     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
                 }
-                xmlhttp.open("GET",xmldocName,false);
+                var cgifile = "/cgi-bin/checklinedatafiles.cgi?";
+                var dateStr = selDate.toString().replace('-', '').replace('-', '');
+                var bus = "粤B1T34K";
+                cgifile = cgifile + dateStr + "&" + bus;
+//                console.log(dateStr);
+                xmlhttp.open("GET", cgifile, false);
                 xmlhttp.send();
-                xmlDoc=xmlhttp.responseXML;
+                xmlDoc = xmlhttp.responseXML;
                 if (xmlDoc === null) {
                     window.alert("null");
                 } else {
@@ -36,34 +41,50 @@ and open the template in the editor.
 //                    var secP = document.createElement('p');
 //                    secP.innerHTML = xmlDoc.getElementsByTagName('Id')[0].childNodes[0].nodeValue;
 //                    bllEl.appendChild(secP);  
-                    var info = readData(xmlDoc);
-                    var lineId = info[0];
-                    var lineStatus = info[1];
-                    var lineChecker = info[2];
-                
-                    var trNode = document.createElement('tr');
-                    var tdNode1 = document.createElement('td');
-                    tdNode1.innerHTML = lineId;
-                    trNode.appendChild(tdNode1);
-                    var tdNode2 = document.createElement('td');
-                    var tdNode3 = document.createElement('td');
-                    if (lineStatus === true) {
-                        tdNode2.innerHTML = "已核实";
-                        tdNode3.innerHTML = lineChecker;
-                    } else {
-                        tdNode2.innerHTML = "未核实";
-                        tdNode3.innerHTML = "";
+//                    var info = readData(xmlDoc);
+//                    var lineId = info[0];
+//                    var lineStatus = info[1];
+//                    var lineChecker = info[2];
+                    var numberOfFiles = xmlDoc.documentElement.getAttribute('number');
+                    if (numberOfFiles !== 0) {
+                        var newTableNode = document.createElement('table');
+                        newTableNode.setAttribute("id", "listTable");
+                        newTableNode.appendChild(createTableHead(document, "班 次", "状 态", "审核人", "审 核"));
+                        
+                        var fileNodes = xmlDoc.getElementsByTagName('file');
+                        for (var i = 0; i < fileNodes.length; i++) {
+                            var lineId = fileNodes.item(i).getElementsByTagName('name').item(0).childNodes[0].nodeValue;
+                            var checked = fileNodes.item(i).getElementsByTagName('status').item(0).childNodes[0].nodeValue;
+                            var checker = fileNodes.item(i).getElementsByTagName('checker').item(0).childNodes[0].nodeValue;
+                            var tdNodeLineId = document.createElement('td');
+                            var tdNodeChecked = document.createElement('td');
+                            var tdNodeChecker = document.createElement('td');
+                            var tdNodeButton = document.createElement('td');
+                            var btnNode = document.createElement('button');
+                            btnNode.setAttribute("class", "btn");
+                            btnNode.setAttribute("onclick", "checkLine(this)");
+                            tdNodeLineId.innerHTML = lineId;
+                            if (checked === "true") {
+                                tdNodeChecked.innerHTML = "已审核";
+                                tdNodeChecker.innerHTML = checker;
+                                btnNode.innerHTML = "重审核";
+                            } else {
+                                tdNodeChecked.innerHTML = "未审核";
+                                tdNodeChecker.innerHTML = "";
+                                btnNode.innerHTML = "审核";
+                            }
+                            tdNodeButton.appendChild(btnNode);
+                            var trNode = document.createElement('tr');
+                            trNode.appendChild(tdNodeLineId);
+                            trNode.appendChild(tdNodeChecked);
+                            trNode.appendChild(tdNodeChecker);
+                            trNode.appendChild(tdNodeButton);
+                            newTableNode.appendChild(trNode);
+                        }
                     }
-                    trNode.appendChild(tdNode2);
-                    trNode.appendChild(tdNode3);
-                    var tdNode4 = document.createElement('td');
-                    var btnNode = document.createElement('button');
-                    btnNode.setAttribute("class","btn");
-                    btnNode.setAttribute("onclick","checkLine(this)");
-                    btnNode.innerHTML = lineStatus ? "重核实" : "核实";
-                    tdNode4.appendChild(btnNode);
-                    trNode.appendChild(tdNode4);
-                    document.getElementById('listTable').appendChild(trNode);                   
+
+                    var tableNode = document.getElementById('listTable');
+                    bllEl.replaceChild(newTableNode, tableNode);
                 }
 
             }
@@ -83,10 +104,10 @@ and open the template in the editor.
             <form action="">
                 <label for="datePicker">请选择需要核实车次的日期：</label>
                 <input id="datePicker" type="date" name="date" min="2014-11-21"/>
-<!--                <script>
-                    document.getElementById('datePicker').value = new Date().toISOString().substring(0, 10);
-                </script>-->
-<!--                <input class="btn" type="submit" value="确定">-->
+                <!--                <script>
+                                    document.getElementById('datePicker').value = new Date().toISOString().substring(0, 10);
+                                </script>-->
+                <!--                <input class="btn" type="submit" value="确定">-->
             </form>
         </div>
         <div id="busLineList">

@@ -34,3 +34,13 @@ function readData(xmldoc) {
     var arr = [lineId, status, checker];
     return arr;
 }
+
+function createTableHead() {
+    var trNode = arguments[0].createElement('tr');
+    for (var i = 1; i < arguments.length; i++) {
+        var thNode = arguments[0].createElement('th');
+        thNode.innerHTML = arguments[i];
+        trNode.appendChild(thNode);
+    }
+    return trNode;
+}

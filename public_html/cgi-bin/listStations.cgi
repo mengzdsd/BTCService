@@ -8,8 +8,8 @@
 use strict;
 use XML::DOM;
 
-#my $line = $ENV{QUERY_STRING};
-my $line = "linestations";
+my $line = $ENV{QUERY_STRING};
+#my $line = "linestations";
 my $fileDir = "../xml";
 my $xmlfile = "$fileDir/$line.xml";
 my $xmlParser = new XML::DOM::Parser;
@@ -20,27 +20,13 @@ my $n = $stationNameNodes->getLength;
 
 my $xmlStr = "<stations>";
 
-#for (my $i = 0; $i < $n; $i++) {
-#    my $stationName = $stationNameNodes->item($i)->getFirstChild()->toString();
-#    $xmlStr .= "<station>$stationName</station>";
-#}
-#
-my $i = 0;
-while ($i < $n) {
-	if ( (($i + 1) % 7) != 0 ) {
-		my $stationName = $stationNameNodes->item($i)->getFirstChild()->toString();
-		print "$stationName-";
-		$i++;
-	} else {
-		print "\n";
-		my $stationName = $stationNameNodes->item($i)->getFirstChild()->toString();
-		print "$stationName-";
-		$i++;
-	}	
+for (my $i = 0; $i < $n; $i++) {
+    my $stationName = $stationNameNodes->item($i)->getFirstChild()->toString();
+    $xmlStr .= "<station>$stationName</station>";
 }
-#$xmlStr .= "</stations>";
-#my $xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
-#$xmlStr = $xmlHeader . $xmlStr;
-#
-#print "Content-type: text/xml\n\n";
-#print $xmlStr;
+$xmlStr .= "</stations>";
+my $xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
+$xmlStr = $xmlHeader . $xmlStr;
+
+print "Content-type: text/xml\n\n";
+print $xmlStr;

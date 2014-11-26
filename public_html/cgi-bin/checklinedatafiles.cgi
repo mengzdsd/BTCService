@@ -22,7 +22,7 @@ my @pairs = split(/&/, $buffer);
 my $date = $pairs[0];
 my $bus = $pairs[1];
 my $numberOfFiles;
-my $dataDir = "../linedata/";
+my $dataDir = "../linedata";
 my @fileList = ();
 
 #$dateArg = $ENV{QUERY_STRING};

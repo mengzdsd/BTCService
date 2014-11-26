@@ -16,26 +16,11 @@ and open the template in the editor.
     <body id="body">
         <div id="header">
             <h1>欢迎进入售票核实系统</h1>
-            <button class="btn btn-primary btn-large" type="button" onclick="back_previous()">返 回</button>
+            <a href="/videochecklist.html">
+                <button class="btn btn-primary btn-large" type="button">返 回</button>
+            </a>
             <p id="version">版本：1.0</p>
             <p id="line">________________________________________________</p>
-        </div>
-        <div id="main">
-            <p>班次： </p>
-            <div id="stationInput">
-                <button id="submitbtn" class="btn" onclick="submitStation()">确 定</button>
-                <form>
-                    <label for="stationName">请选择站名：</label>
-                    <input id="stationName" list="stationList" name="station"/>
-                    <datalist id="stationList">
-                        <option value="虎门中心站"/>
-                        <option value="乐购"/>
-                        <option value="虎威加油站"/>
-                    </datalist>
-                    <label for="downCount">下站人数：</label>
-                    <input id="downCount" type="number" name="downcount" min="0"/>                   
-                </form>
-            </div>
         </div>
         <script type="text/javascript">
             if (window.XMLHttpRequest) {
@@ -51,47 +36,9 @@ and open the template in the editor.
                 if (xmlDoc === null) {
                     window.alert("null");
                 } else {
-                    var dataListNode = xmlDoc.documentElement;
-                    var lableNode1 = document.createElement('label');
-                    lableNode1.setAttribute("for","stationName");
-                    lableNode1.innerHTML = "请选择站名：";
-                    var inputNode1 = document.createElement('input');
-                    inputNode1.setAttribute("id","stationName");
-                    inputNode1.setAttribute("list","stationList");
-                    inputNode1.setAttribute("name","station");
-                    var lableNode2 = document.createElement('label');
-                    lableNode2.setAttribute("for","downCount");
-                    lableNode2.innerHTML = "下站人数：";
-                    var inputNode2 = document.createElement('input');
-                    inputNode2.setAttribute("id","downCount");
-                    inputNode2.setAttribute("type","number");
-                    inputNode2.setAttribute("name","downcount");
-                    inputNode2.setAttribute("min","0");
-                    var formNode = document.createElement('form');
-                    formNode.appendChild(lableNode1);
-                    formNode.appendChild(inputNode1);
-                    formNode.appendChild(dataListNode);
-                    formNode.appendChild(lableNode2);
-                    formNode.appendChild(inputNode2);
-                    var btnNode = document.createElement('button');
-                    btnNode.setAttribute("id","submitbtn");
-                    btnNode.setAttribute("class","btn");
-                    btnNode.setAttribute("onclick","submitStation()");
-                    btnNode.innerHTML = "确 定";
-                    var divInputNode = document.createElement('div');
-                    divInputNode.setAttribute("id","stationInput");
-                    divInputNode.appendChild(btnNode);
-                    divInputNode.appendChild(formNode);
-                    var pNode = document.createElement('p');
-                    pNode.innerHTML = "班次：";
-                    var divMainNode = document.createElement('div');
-                    divMainNode.setAttribute("id","main");
-                    divMainNode.appendChild(pNode);
-                    divMainNode.appendChild(divInputNode);
-                    
-                    var bodyNode = document.getElementById('body');
-		    var oldDivNode = document.getElementById('main');
-                    bodyNode.replaceChild(divMainNode,oldDivNode);
+                    var divNode = createCheckMain(xmlDoc,document);
+
+                    document.getElementById('body').appendChild(divNode);
                 }         
         </script>
     </body>

@@ -72,6 +72,17 @@ body {
     float: right;
 }
 
+#main {
+    width: 800px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#main #stationInput {
+    width: 460px;
+    margin-top: 5px;
+}
+
 #busLineList {
     margin-top: 10px;
     margin-left: 10px;
@@ -94,6 +105,10 @@ body {
     padding-bottom: 4px;
     background-color: #A7C942;
     color: #ffffff;
+}
+
+#downCount {
+    width: 30px;
 }
 
 .btn-large {

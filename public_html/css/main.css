@@ -53,33 +53,15 @@ hr {
     display: block;
 }
 
-#datepicker {
-    width: 380px;
-    margin-left: 50px;
-    margin-top: 10px;
-    color: #0033ff;
-}
-
-#date{
-    width: 450px;
+#dateselect{
     margin-top: 10px;
     margin-left: 10px;
     padding: 5px;
 }
 
-#submitbtn {
-    float: right;
-}
-
 #main #stationInput {
     width: 460px;
     margin-top: 5px;
-}
-
-#busLineList {
-    margin-top: 10px;
-    margin-left: 10px;
-    width: 800px;
 }
 
 #listTable {

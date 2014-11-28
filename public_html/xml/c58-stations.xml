@@ -4,216 +4,216 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<stations line="长58" xmlns="http://www.mapao.com/projects/buscheck/">
-    <station id="1">
+<stations line="长58">
+    <station id="s1">
         <name>虎门中心站</name>
         <location></location>
     </station>
-    <station id="2">
+    <station id="s2">
         <name>乐购</name>
         <location></location>
     </station>
-    <station id="3">
+    <station id="s3">
         <name>虎威加油站</name>
         <location></location>
     </station>
-    <station id="4">
+    <station id="s4">
         <name>龙眼</name>
         <location></location>
     </station>
-    <station id="5">
+    <station id="s5">
         <name>北栅高速口</name>
         <location></location>
     </station>
-    <station id="6">
+    <station id="s6">
         <name>北栅市场</name>
         <location></location>
     </station>
-    <station id="7">
+    <station id="s7">
         <name>雅都</name>
         <location></location>
     </station>
-    <station id="8">
+    <station id="s8">
         <name>怀德路口</name>
         <location></location>
     </station>
-    <station id="9">
+    <station id="s9">
         <name>崌岐</name>
         <location></location>
     </station>
-    <station id="10">
+    <station id="s10">
         <name>树田</name>
         <location></location>
     </station>
-    <station id="11">
+    <station id="s11">
         <name>大宁路口</name>
         <location></location>
     </station>
-    <station id="12">
+    <station id="s12">
         <name>大阪地</name>
         <location></location>
     </station>
-    <station id="13">
+    <station id="s13">
         <name>厦边</name>
         <location></location>
     </station>
-    <station id="14">
+    <station id="s14">
         <name>厦岗标志</name>
         <location></location>
     </station>
-    <station id="15">
+    <station id="s15">
         <name>环球</name>
         <location></location>
     </station>
-    <station id="16">
+    <station id="s16">
         <name>百乐门</name>
         <location></location>
     </station>
-    <station id="17">
+    <station id="s17">
         <name>上沙车站</name>
         <location></location>
     </station>
-    <station id="18">
+    <station id="s18">
         <name>港湾医院</name>
         <location></location>
     </station>
-    <station id="19">
+    <station id="s19">
         <name>沙头</name>
         <location></location>
     </station>
-    <station id="20">
+    <station id="s20">
         <name>时代广场</name>
         <location></location>
     </station>
-    <station id="21">
+    <station id="s21">
         <name>街口</name>
         <location></location>
     </station>
-    <station id="22">
+    <station id="s22">
         <name>乌沙</name>
         <location></location>
     </station>
-    <station id="23">
+    <station id="s23">
         <name>长安北站</name>
         <location></location>
     </station>
-    <station id="24">
+    <station id="s24">
         <name>长安酒店</name>
         <location></location>
     </station>
-    <station id="25">
+    <station id="s25">
         <name>锦厦</name>
         <location></location>
     </station>
-    <station id="26">
+    <station id="s26">
         <name>宵边</name>
         <location></location>
     </station>
-    <station id="27">
+    <station id="s27">
         <name>长安车站</name>
         <location></location>
     </station>
-    <station id="28">
+    <station id="s28">
         <name>涌头</name>
         <location></location>
     </station>
-    <station id="29">
+    <station id="s29">
         <name>洪桥头</name>
         <location></location>
     </station>
-    <station id="30">
+    <station id="s30">
         <name>松岗医院</name>
         <location></location>
     </station>
-    <station id="31">
+    <station id="s31">
         <name>松岗桥底</name>
         <location></location>
     </station>
-    <station id="32">
+    <station id="s32">
         <name>松岗天虹</name>
         <location></location>
     </station>
-    <station id="33">
+    <station id="s33">
         <name>潭头</name>
         <location></location>
     </station>
-    <station id="34">
+    <station id="s34">
         <name>上园酒店</name>
         <location></location>
     </station>
-    <station id="35">
+    <station id="s35">
         <name>沙井中心站</name>
         <location></location>
     </station>
-    <station id="36">
+    <station id="s36">
         <name>上寮市场</name>
         <location></location>
     </station>
-    <station id="37">
+    <station id="s37">
         <name>沙井电子城</name>
         <location></location>
     </station>
-    <station id="38">
+    <station id="s38">
         <name>凤凰车站</name>
         <location></location>
     </station>
-    <station id="39">
+    <station id="s39">
         <name>凤凰立交</name>
         <location></location>
     </station>
-    <station id="40">
+    <station id="s40">
         <name>和谐酒店</name>
         <location></location>
     </station>
-    <station id="41">
+    <station id="s41">
         <name>福永汽车站</name>
         <location></location>
     </station>
-    <station id="42">
+    <station id="s42">
         <name>下十围</name>
         <location></location>
     </station>
-    <station id="43">
+    <station id="s43">
         <name>黄田</name>
         <location></location>
     </station>
-    <station id="44">
+    <station id="s44">
         <name>钟屋</name>
         <location></location>
     </station>
-    <station id="45">
+    <station id="s45">
         <name>鹤州路口</name>
         <location></location>
     </station>
-    <station id="46">
+    <station id="s46">
         <name>三围路口</name>
         <location></location>
     </station>
-    <station id="47">
+    <station id="s47">
         <name>固戍村</name>
         <location></location>
     </station>
-    <station id="48">
+    <station id="s48">
         <name>农批市场</name>
         <location></location>
     </station>
-    <station id="49">
+    <station id="s49">
         <name>西乡路口</name>
         <location></location>
     </station>
-    <station id="50">
+    <station id="s50">
         <name>上川路口</name>
         <location></location>
     </station>
-    <station id="51">
+    <station id="s51">
         <name>裕安路口</name>
         <location></location>
     </station>
-    <station id="52">
+    <station id="s52">
         <name>宝安汽车站</name>
         <location></location>
     </station>
-    <station id="53">
+    <station id="s53">
         <name>南头检查站</name>
         <location></location>
     </station>

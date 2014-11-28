@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<buses>
+    <bus>粤BAAAAA</bus>
+    <bus>粤BBBBBB</bus>
+    <bus>粤BCCCCC</bus>
+    <bus>粤BDDDDD</bus>
+    <bus>粤BEEEEE</bus>
+    <bus>粤BFFFFF</bus>
+    <bus>粤BGGGGG</bus>
+    <bus>粤BHHHHH</bus>
+    <bus>粤BIIIII</bus>
+</buses>

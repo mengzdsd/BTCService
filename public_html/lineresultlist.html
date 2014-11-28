@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="zh">
+    <head>
+        <title>售票审核系统-监控视频列表</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="css/main.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="js/xmlhandler.js"></script>
+        <script type="text/javascript">
+            function comfirmInputData() {
+//               window.location.reload();
+                var bllEl = document.getElementById('buslinelist');
+                var selDate = document.getElementById('datepicker').value;
+                var busLicense = document.getElementById('buslicense').value;
+                var headText = "<b>日期：</b> " + selDate.toString() + "<b>班车：</b>" + busLicense;
+                bllEl.getElementsByTagName('p')[0].innerHTML = headText;
+
+//                var xmldocName = "linedata/20141121/粤B1T34K2014112101.xml";
+//                var xmldocName = "linedata/20141121/测试.xml";
+//                if (window.XMLHttpRequest) {
+//                    xmlhttp = new XMLHttpRequest();
+//                } else {
+//                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//                }
+//                var cgifile = "/cgi-bin/checklinedatafiles.cgi?";
+//                var dateStr = selDate.toString().replace('-', '').replace('-', '');
+//                var bus = "粤B1T34K";
+//                cgifile = cgifile + dateStr + "&" + bus;
+////                console.log(dateStr);
+//                xmlhttp.open("GET", cgifile, false);
+//                xmlhttp.send();
+//                xmlDoc = xmlhttp.responseXML;
+//                if (xmlDoc === null) {
+//                    window.alert("null");
+//                } else {
+//                    var numberOfFiles = xmlDoc.documentElement.getAttribute('number');
+//                    if (numberOfFiles !== 0) {
+//                        var newTableNode = document.createElement('table');
+//                        newTableNode.setAttribute("id", "listTable");
+//                        newTableNode.appendChild(createTableHead(document, "班 次", "状 态", "审核人", "审 核"));
+//
+//                        var fileNodes = xmlDoc.getElementsByTagName('file');
+//                        for (var i = 0; i < fileNodes.length; i++) {
+//                            var lineId = fileNodes.item(i).getElementsByTagName('name').item(0).childNodes[0].nodeValue;
+//                            var checked = fileNodes.item(i).getElementsByTagName('status').item(0).childNodes[0].nodeValue;
+//                            var checker = fileNodes.item(i).getElementsByTagName('checker').item(0).childNodes[0].nodeValue;
+//                            var tdNodeLineId = document.createElement('td');
+//                            var tdNodeChecked = document.createElement('td');
+//                            var tdNodeChecker = document.createElement('td');
+//                            var tdNodeButton = document.createElement('td');
+//                            var btnNode = document.createElement('button');
+//                            btnNode.setAttribute("class", "btn");
+//                            btnNode.setAttribute("onclick", "checkLine(this)");
+//                            tdNodeLineId.innerHTML = lineId;
+//                            if (checked === "true") {
+//                                tdNodeChecked.innerHTML = "已审核";
+//                                tdNodeChecker.innerHTML = checker;
+//                                btnNode.innerHTML = "重审核";
+//                            } else {
+//                                tdNodeChecked.innerHTML = "未审核";
+//                                tdNodeChecker.innerHTML = "";
+//                                btnNode.innerHTML = "审核";
+//                            }
+//                            tdNodeButton.appendChild(btnNode);
+//                            var trNode = document.createElement('tr');
+//                            trNode.appendChild(tdNodeLineId);
+//                            trNode.appendChild(tdNodeChecked);
+//                            trNode.appendChild(tdNodeChecker);
+//                            trNode.appendChild(tdNodeButton);
+//                            newTableNode.appendChild(trNode);
+//                        }
+//                    }
+//
+//                    var tableNode = document.getElementById('listTable');
+//                    bllEl.replaceChild(newTableNode, tableNode);
+//                }
+
+            }
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <h1>欢迎进入售票审核系统</h1>
+            <a href="index.html">
+                <button class="btn btn-primary btn-large" type="button">返 回</button>
+            </a>
+            <p id="version">版本：1.0</p>
+            <hr/>
+        </div>
+        <div id="main">
+            <div id="dateselect">               
+                <label for="datepicker">请选择要查看的日期：</label>
+                <input id="datepicker" type="date" min="2014-11-21" value="2014-11-21">
+                <label for="buslicense">请选择要查看的班车：</label>
+                <input id="buslicense" type="text">
+                <button id="confirmbtn" class="btn" onclick="comfirmInputData()">确 定</button>
+            </div>
+            <div id="buslinelist">
+                <p></p>
+                <table id="listTable">
+                    <tr>
+                        <th>班 次</th>
+                        <th>状 态</th>
+                        <th>审核人</th>
+                        <th>审核日期</th>
+                        <th>详细信息</th>
+                    </tr>
+                    <!-- <table id="listTable">
+                    <tr>
+                        <th>班 次</th>
+                        <th>状 态</th>
+                        <th>核实人</th>
+                        <th>核 实</th>
+                    </tr>
+                </table>  -->
+                </table>
+            </div>
+        </div>
+        <div id="footer">
+
+        </div>
+    </body>
+</html>

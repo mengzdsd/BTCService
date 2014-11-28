@@ -48,20 +48,18 @@ hr {
     margin-left: 10px;
 }
 
+// for page 1
 #entrance {
     margin-top: 100px;
     display: block;
 }
+// end page 1
 
+// for page 2
 #dateselect{
     margin-top: 10px;
     margin-left: 10px;
     padding: 5px;
-}
-
-#main #stationInput {
-    width: 460px;
-    margin-top: 5px;
 }
 
 #listTable {
@@ -81,11 +79,11 @@ hr {
     background-color: #A7C942;
     color: #ffffff;
 }
+// end page 2
 
-#downCount {
-    width: 30px;
-}
+// for page 3
 
+// common
 .btn-large {
   padding: 11px 19px;
   font-size: 17.5px;

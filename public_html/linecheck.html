@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="zh">
+    <head>
+        <title>售票审核系统-监控视频审核</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="css/main.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="js/xmlhandler.js"></script>
+
+    </head>
+    <body id="body">
+        <div id="header">
+            <h1>欢迎进入售票审核系统</h1>
+            <a href="linecheck.html">
+                <button class="btn btn-primary btn-large" type="button">返 回</button>
+            </a>
+            <p id="version">版本：1.0</p>
+            <hr/>
+        </div>
+        <div id="main">
+            <p><b>班次：</b></p>
+            <div id="downbox">
+<!--                <script type="text/javascript">
+                    if (window.XMLHttpRequest) {
+                        xmlhttp = new XMLHttpRequest();
+                    } else {
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    var line = "linestations";
+                    var cgifile = "/cgi-bin/listStations.cgi?" + line;
+                    xmlhttp.open("GET", cgifile, false);
+                    xmlhttp.send();
+                    xmlDoc = xmlhttp.responseXML;
+                    if (xmlDoc === null) {
+                        window.alert("null");
+                    } else {
+                        var divNode = createCheckMain(xmlDoc, document);
+
+                        document.getElementById('body').appendChild(divNode);
+                    }
+                </script>-->
+            </div>
+        </div>
+    </body>
+</html>

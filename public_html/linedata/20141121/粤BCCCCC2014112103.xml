@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BusLine>
+	<!-- 班次信息 -->
+	<Id>粤BCCCCC2014112103</Id>
+	<!-- 起点站 -->
+	<StartStation>虎门中心站</StartStation>
+	<!-- 终点站 -->
+	<EndStation>南头检查站</EndStation>
+	<Date>20141121</Date>
+	<StartTime>08:45:00</StartTime>
+	<StopTime>10:12:00</StopTime>
+	<!-- 售票总数 -->
+	<TicketCount>8</TicketCount>
+	<!-- 总售票额 -->
+	<TicketAmount>112.00</TicketAmount>
+	<!-- 车牌号 -->
+	<BusLicensePlate>粤BCCCCC</BusLicensePlate>
+	<!-- 售票员 -->
+	<TicketSeller>
+		<!-- 员工号 -->
+		<Eid>123456789</Eid>
+		<Name>王小明</Name>
+		<CallNumber>13000000000</CallNumber>
+	</TicketSeller>
+	<!-- 司机 -->
+	<Driver>
+		<!-- 员工号 -->
+		<Eid>111111111</Eid>
+		<Name>李小华</Name>
+		<CallNumber>13100000000</CallNumber>
+	</Driver>
+	<!-- 出票信息 -->
+	<Tickets>
+		<Ticket id="粤BCCCCC2014112101001">
+			<Time>08:46:11</Time>
+			<UpStation>虎门中心站</UpStation>
+			<DownStation>南头检查站</DownStation>
+			<Count>3</Count>
+			<Price>20.00</Price>
+		</Ticket>
+		<Ticket id="粤BCCCCC2014112101002">
+			<Time>08:47:00</Time>
+			<UpStation>虎门中心站</UpStation>
+			<DownStation>时代广场</DownStation>
+			<Count>1</Count>
+			<Price>6.00</Price>
+		</Ticket>
+		<Ticket id="粤BCCCCC2014112101003">
+			<Time>09:01:00</Time>
+			<UpStation>龙眼</UpStation>
+			<DownStation>松岗医院</DownStation>
+			<Count>2</Count>
+			<Price>10.00</Price>
+		</Ticket>
+		<Ticket id="粤BCCCCC2014112101004">
+			<Time>09:20:01</Time>
+			<UpStation>树田</UpStation>
+			<DownStation>沙井中心站</DownStation>
+			<Count>1</Count>
+			<Price>11.00</Price>
+		</Ticket>
+		<Ticket id="粤BCCCCC2014112101005">
+			<Time>09:35:00</Time>
+			<UpStation>厦岗标志</UpStation>
+			<DownStation>南头检查站</DownStation>
+			<Count>1</Count>
+			<Price>15</Price>
+		</Ticket>
+	</Tickets>
+</BusLine>

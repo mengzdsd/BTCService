@@ -12,6 +12,21 @@ and open the template in the editor.
         <link href="css/main.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/xmlhandler.js"></script>
         <script type="text/javascript">
+            var xmlhttp = new XMLHttpRequest();
+            
+            function getBus(line) {
+                var busUrl = "server-script/getBus.php?" + "line=" + line;
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.responseText === "NULL") {
+                        alert('Can not get the bus info from server.');
+                    } else {
+                        document.getElementById('buslicense').innerHTML = xmlhttp.responseText;
+                    }
+                };
+                xmlhttp.open('GET',busUrl,true);
+                xmlhttp.send();              
+            }
+            
             function comfirmInputData() {
 //               window.location.reload();
                 var bllEl = document.getElementById('buslinelist');
@@ -81,6 +96,9 @@ and open the template in the editor.
 //                }
 
             }
+
+            // define the line
+            var line = "c58";
         </script>
     </head>
     <body>
@@ -97,7 +115,16 @@ and open the template in the editor.
                 <label for="datepicker">请选择要审核的日期：</label>
                 <input id="datepicker" type="date" min="2014-11-21" value="2014-11-21">
                 <label for="buslicense">请选择要审核的班车：</label>
-                <input id="buslicense" type="text">
+                <!-- <input id="buslicense" type="text"> -->
+                <select id="buslicense">
+<!--                    <option>粤BAAAAA</option> 
+                    <option>粤BBBBBB</option>
+                    <option>粤BCCCCC</option>-->
+                </select>
+                <script type="text/javascript">
+                    var line = 'c58';
+                    getBus(line);
+                </script>
                 <button id="confirmbtn" class="btn" onclick="comfirmInputData()">确 定</button>
             </div>
             <div id="buslinelist">
@@ -109,14 +136,6 @@ and open the template in the editor.
                         <th>核实人</th>
                         <th>核 实</th>
                     </tr>
-                    <!-- <table id="listTable">
-                    <tr>
-                        <th>班 次</th>
-                        <th>状 态</th>
-                        <th>核实人</th>
-                        <th>核 实</th>
-                    </tr>
-                </table>  -->
                 </table>
             </div>
         </div>

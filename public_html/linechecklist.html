@@ -15,13 +15,17 @@ and open the template in the editor.
             var xmlhttp = new XMLHttpRequest();
             
             function getBus(line) {
-                var busUrl = "server-script/getBus.php?" + "line=" + line;
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.responseText === "NULL") {
-                        alert('Can not get the bus info from server.');
-                    } else {
-                        document.getElementById('buslicense').innerHTML = xmlhttp.responseText;
-                    }
+                var busUrl = "cgi-bin/getBus.cgi?" + "line=" + line;
+		xmlhttp.onreadystatechange = function() {
+		    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+			if (xmlhttp.responseText === "NULL") {
+			    alert('Can not get the bus info from server.');
+			} else {
+			    document.getElementById('buslicense').innerHTML = xmlhttp.responseText;
+			}
+		    } else {
+			console.log("Get server error " + xmlhttp.status);
+		    }
                 };
                 xmlhttp.open('GET',busUrl,true);
                 xmlhttp.send();              
@@ -37,7 +41,7 @@ and open the template in the editor.
                 
                 var datePair = 'date=' + selDate.toString().replace('-', '').replace('-', '');
                 var busPair = 'bus=' + busLicense.toLocaleString();
-                var getUrl = 'server-script/getLines.php?' + datePair + '&' + busPair;
+                var getUrl = 'cgi-bin/getLines.cgi?' + datePair + '&' + busPair;
 //                console.log(getUrl);
                 xmlhttp.onreadystatechange = function() {
                     if (xmlhttp.responseText === "NULL") {

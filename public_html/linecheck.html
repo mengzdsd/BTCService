@@ -11,39 +11,49 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="css/main.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/xmlhandler.js"></script>
-
+        <script type="text/javascript">
+            var curhref = decodeURIComponent(window.location.href);
+        </script>
     </head>
     <body id="body">
         <div id="header">
             <h1>欢迎进入售票审核系统</h1>
-            <a href="linecheck.html">
+            <a href="linechecklist.html">
                 <button class="btn btn-primary btn-large" type="button">返 回</button>
             </a>
             <p id="version">版本：1.0</p>
             <hr/>
         </div>
         <div id="main">
-            <p><b>班次：</b></p>
+            <div id="idp">
+                <p><b>班次：</b></p>
+            </div>
+            <script type="text/javascript">
+                var strArr = curhref.split("?");
+                var idStr = strArr[1].split("=")[1];
+//                console.log(idStr);
+                document.getElementById('idp').innerHTML = "<p><b>班次：</b>" + idStr + "</p>";
+            </script>
             <div id="downbox">
-<!--                <script type="text/javascript">
-                    if (window.XMLHttpRequest) {
-                        xmlhttp = new XMLHttpRequest();
-                    } else {
-                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                    }
-                    var line = "linestations";
-                    var cgifile = "/cgi-bin/listStations.cgi?" + line;
-                    xmlhttp.open("GET", cgifile, false);
-                    xmlhttp.send();
-                    xmlDoc = xmlhttp.responseXML;
-                    if (xmlDoc === null) {
-                        window.alert("null");
-                    } else {
-                        var divNode = createCheckMain(xmlDoc, document);
-
-                        document.getElementById('body').appendChild(divNode);
-                    }
-                </script>-->
+                <!--                <script type="text/javascript">
+                                    if (window.XMLHttpRequest) {
+                                        xmlhttp = new XMLHttpRequest();
+                                    } else {
+                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                                    }
+                                    var line = "linestations";
+                                    var cgifile = "/cgi-bin/listStations.cgi?" + line;
+                                    xmlhttp.open("GET", cgifile, false);
+                                    xmlhttp.send();
+                                    xmlDoc = xmlhttp.responseXML;
+                                    if (xmlDoc === null) {
+                                        window.alert("null");
+                                    } else {
+                                        var divNode = createCheckMain(xmlDoc, document);
+                
+                                        document.getElementById('body').appendChild(divNode);
+                                    }
+                                </script>-->
             </div>
         </div>
     </body>

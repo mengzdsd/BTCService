@@ -13,20 +13,22 @@ and open the template in the editor.
         <script type="text/javascript" src="js/xmlhandler.js"></script>
         <script type="text/javascript">
             var xmlhttp = new XMLHttpRequest();
-            
+            // define the line
+            var line = "c58";
+
             function getBus(line) {
                 var busUrl = "server-script/getBus.php?" + "line=" + line;
-                xmlhttp.onreadystatechange = function() {
+                xmlhttp.onreadystatechange = function () {
                     if (xmlhttp.responseText === "NULL") {
                         alert('Can not get the bus info from server.');
                     } else {
                         document.getElementById('buslicense').innerHTML = xmlhttp.responseText;
                     }
                 };
-                xmlhttp.open('GET',busUrl,true);
-                xmlhttp.send();              
+                xmlhttp.open('GET', busUrl, true);
+                xmlhttp.send();
             }
-            
+
             function comfirmInputData() {
 //               window.location.reload();
                 var bllEl = document.getElementById('buslinelist');
@@ -34,12 +36,13 @@ and open the template in the editor.
                 var busLicense = document.getElementById('buslicense').value;
                 var headText = "<b>日期：</b> " + selDate.toString() + "<b>班车：</b>" + busLicense;
                 bllEl.getElementsByTagName('p')[0].innerHTML = headText;
-                
+
                 var datePair = 'date=' + selDate.toString().replace('-', '').replace('-', '');
                 var busPair = 'bus=' + busLicense.toLocaleString();
-                var getUrl = 'server-script/getLines.php?' + datePair + '&' + busPair;
+                var linePair = 'line=' + line; 
+                var getUrl = 'server-script/getLines.php?' + datePair + '&' + busPair + '&' + linePair;
 //                console.log(getUrl);
-                xmlhttp.onreadystatechange = function() {
+                xmlhttp.onreadystatechange = function () {
                     if (xmlhttp.responseText === "NULL") {
 //                        alert('Can not get the line info from server.');
                         var pEl = document.createElement('p');
@@ -50,11 +53,9 @@ and open the template in the editor.
                         document.getElementById('listTable').innerHTML = xmlhttp.responseText;
                     }
                 };
-                xmlhttp.open('GET',getUrl,true);
-                xmlhttp.send(); 
+                xmlhttp.open('GET', getUrl, true);
+                xmlhttp.send();
             }
-            // define the line
-            // var line = "c58";
         </script>
     </head>
     <body>
@@ -73,12 +74,12 @@ and open the template in the editor.
                 <label for="buslicense">请选择要审核的班车：</label>
                 <!-- <input id="buslicense" type="text"> -->
                 <select id="buslicense">
-<!--                    <option>粤BAAAAA</option> 
-                    <option>粤BBBBBB</option>
-                    <option>粤BCCCCC</option>-->
+                    <!--                    <option>粤BAAAAA</option> 
+                                        <option>粤BBBBBB</option>
+                                        <option>粤BCCCCC</option>-->
                 </select>
                 <script type="text/javascript">
-                    var line = 'c58';
+//                    var line = 'c58';
                     getBus(line);
                 </script>
                 <button id="confirmbtn" class="btn" onclick="comfirmInputData()">确 定</button>
@@ -92,18 +93,18 @@ and open the template in the editor.
                         <th>核实人</th>
                         <th>核 实</th>
                     </tr>
-<!--                    <tr>
-                        <td>粤BAAAAA2014112101</td>
-                        <td class="greenColor">已审核</td>
-                        <td>犹梦哲</td>
-                        <td><a href="">重审核</a></td>
-                    </tr>
-                    <tr>
-                        <td>粤BBBBBB2014112102</td>
-                        <td class="redColor">未审核</td>
-                        <td></td>
-                        <td><a href="">审核</a></td>
-                    </tr>-->
+                    <!--                    <tr>
+                                            <td>粤BAAAAA2014112101</td>
+                                            <td class="greenColor">已审核</td>
+                                            <td>犹梦哲</td>
+                                            <td><a href="">重审核</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>粤BBBBBB2014112102</td>
+                                            <td class="redColor">未审核</td>
+                                            <td></td>
+                                            <td><a href="">审核</a></td>
+                                        </tr>-->
                 </table>
             </div>
         </div>

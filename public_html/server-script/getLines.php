@@ -37,6 +37,7 @@ error_reporting(E_ALL);
 //$date = "20141121";
 $date = filter_input(INPUT_GET,'date');
 $bus = filter_input(INPUT_GET,'bus');
+$line = filter_input(INPUT_GET, 'line');
 $dataDir = "../linedata/" . $date . '/';
 // echo strlen($bus), PHP_EOL;
 // search ../linedata/<date>/ diretory for bus
@@ -71,10 +72,10 @@ if ($oDir->handle) {
         $checker = "";
         $checkerNodes = $xmlDoc->getElementsByTagName('Checker');
         if ($checkerNodes->length === 0) {
-            $strRet .= "<td class=\"redColor\">未审核</td><td></td><td><a href=\"linecheck.html?id=$idStr\">审核</a></td></tr>";
+            $strRet .= "<td class=\"redColor\">未审核</td><td></td><td><a href=\"linecheck.html?id=$idStr&line=$line\">审核</a></td></tr>";
         } else {
             $checker = $checkerNodes->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
-            $strRet .= "<td class=\"greenColor\">已审核</td><td>$checker</td><td><a href=\"linecheck.html?id=$idStr\">重审核</a></td></tr>";
+            $strRet .= "<td class=\"greenColor\">已审核</td><td>$checker</td><td><a href=\"linecheck.html?id=$idStr&line=$line\">重审核</a></td></tr>";
         }
 //        echo $checker, PHP_EOL;
     }

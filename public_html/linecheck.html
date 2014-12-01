@@ -13,6 +13,12 @@ and open the template in the editor.
         <script type="text/javascript" src="js/xmlhandler.js"></script>
         <script type="text/javascript">
             var curhref = decodeURIComponent(window.location.href);
+            // localhost:8000/linecheck.html?id=%E7%B2%A4BAAAAA2014112102&line=c58
+            var urlParameters = curhref.split("?")[1];
+            var strArr = urlParameters.split("&");
+            var idStr = strArr[0].split("=")[1];
+            var line = strArr[1].split("=")[1];
+            console.log(line);
         </script>
     </head>
     <body id="body">
@@ -29,9 +35,6 @@ and open the template in the editor.
                 <p><b>班次：</b></p>
             </div>
             <script type="text/javascript">
-                var strArr = curhref.split("?");
-                var idStr = strArr[1].split("=")[1];
-//                console.log(idStr);
                 document.getElementById('idp').innerHTML = "<p><b>班次：</b>" + idStr + "</p>";
             </script>
             <div id="downbox">

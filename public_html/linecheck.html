@@ -12,13 +12,39 @@ and open the template in the editor.
         <link href="css/main.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/xmlhandler.js"></script>
         <script type="text/javascript">
-            var curhref = decodeURIComponent(window.location.href);
             // localhost:8000/linecheck.html?id=%E7%B2%A4BAAAAA2014112102&line=c58
+            var curhref = decodeURIComponent(window.location.href);
             var urlParameters = curhref.split("?")[1];
             var strArr = urlParameters.split("&");
             var idStr = strArr[0].split("=")[1];
             var line = strArr[1].split("=")[1];
-            console.log(line);
+
+            var xmlhttp = new XMLHttpRequest();
+            // used to store number of stations
+            var numberOfStations;
+
+            function createStationsTable(line) {
+                if (line === "") {
+                    alert("There is no line info.");
+                    return false;
+                } else {
+                    var serverUrl = "server-script/createStationsTable.php?" + "line=" + line;
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                            if (xmlhttp.responseText === "NULL") {
+                                var pInfo = "<p>无法从服务器拿到站点信息。<p>";
+                                document.getElementById('downCountbox').innerHTML = pInfo;
+                            } else {
+                                var responseStrs = xmlhttp.responseText.split("|");
+                                numberOfStations = responseStrs[0];
+                                document.getElementById('downCountbox').innerHTML = responseStrs[1];
+                            }
+                        }
+                    };
+                    xmlhttp.open('GET', serverUrl, true);
+                    xmlhttp.send();
+                }
+            }
         </script>
     </head>
     <body id="body">
@@ -37,27 +63,67 @@ and open the template in the editor.
             <script type="text/javascript">
                 document.getElementById('idp').innerHTML = "<p><b>班次：</b>" + idStr + "</p>";
             </script>
-            <div id="downbox">
-                <!--                <script type="text/javascript">
-                                    if (window.XMLHttpRequest) {
-                                        xmlhttp = new XMLHttpRequest();
-                                    } else {
-                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                                    }
-                                    var line = "linestations";
-                                    var cgifile = "/cgi-bin/listStations.cgi?" + line;
-                                    xmlhttp.open("GET", cgifile, false);
-                                    xmlhttp.send();
-                                    xmlDoc = xmlhttp.responseXML;
-                                    if (xmlDoc === null) {
-                                        window.alert("null");
-                                    } else {
-                                        var divNode = createCheckMain(xmlDoc, document);
-                
-                                        document.getElementById('body').appendChild(divNode);
-                                    }
-                                </script>-->
+            <p>请查看监控视频，输入站点的下车人数：</p>
+            <div id="downCountbox">
+                <!--                <table>
+                                    <tr>
+                                        <td>
+                                            <label for="s1">AAAAAA</label>
+                                            <input id="s1" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s2">AAAAAA</label>
+                                            <input id="s2" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s3">AAAAAA</label>
+                                            <input id="s3" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s4">AAAAAA</label>
+                                            <input id="s4" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s5">AAAAAA</label>
+                                            <input id="s5" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s6">AAAAAA</label>
+                                            <input id="s6" type="number" min="0" value="0">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="s7">AAAAAA</label>
+                                            <input id="s7" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s8">AAAAAA</label>
+                                            <input id="s8" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s9">AAAAAA</label>
+                                            <input id="s9" type="number" min="0" value="0">
+                                        </td>
+                                        <td>
+                                            <label for="s10">AAAAAA</label>
+                                            <input id="s10" type="number" min="0" value="0">
+                                        </td>
+                                    </tr>
+                                </table>-->
+            </div>
+            <script>
+                createStationsTable(line);
+            </script>
+            <div id="submitDownCount">
+                <br/>
+                <button class="btn" onclick="submitDownCount()">提 交</button>
             </div>
         </div>
+        <script>
+            function submitDownCount() {
+                console.log("Number of Stations: " + numberOfStations);
+            }
+        </script>
     </body>
 </html>

@@ -36,7 +36,7 @@ hr {
     top: -20px;
 }
 
-#header>a {
+#header>button {
     float: right;
     position: relative;
     top: -20px;

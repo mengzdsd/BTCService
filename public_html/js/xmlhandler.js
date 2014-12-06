@@ -46,7 +46,7 @@ function createTableHead() {
 }
 
 function createCheckMain(xmldoc, doc) {
-    var tableNode = createStationTable(xmldoc,doc);
+    var tableNode = createStationTable(xmldoc, doc);
 
     // create p node <p>班次： xxxxxxxxxxxxx</p>
     var pNode1 = doc.createElement('p');
@@ -56,9 +56,9 @@ function createCheckMain(xmldoc, doc) {
     pNode2.innerHTML = "请选择每个站的下站人数：";
     // create button <button id="submitbtn" class="btn" onclick="submitData()">提 交</button>
     var buttonNode = doc.createElement('button');
-    buttonNode.setAttribute("id","submitbtn");
-    buttonNode.setAttribute("class","btn");
-    buttonNode.setAttribute("onclick","submitData()");
+    buttonNode.setAttribute("id", "submitbtn");
+    buttonNode.setAttribute("class", "btn");
+    buttonNode.setAttribute("onclick", "submitData()");
     buttonNode.innerHTML = "提 交";
     // create div node <div id="main">
     var divMainNode = doc.createElement('div');
@@ -69,9 +69,9 @@ function createCheckMain(xmldoc, doc) {
     divMainNode.appendChild(buttonNode);
 
     return divMainNode;
-} 
+}
 
-function createStationTable(xmldoc,doc) {
+function createStationTable(xmldoc, doc) {
     var stationNodes = xmldoc.getElementsByTagName('station');
     // var containNode = doc.createElement('contian');
     var tdNodesArray = [];
@@ -83,12 +83,12 @@ function createStationTable(xmldoc,doc) {
 //        console.log(forAttr);
         var stationName = stationNodes.item(i).childNodes[0].nodeValue;
         var labelNode = doc.createElement('label');
-        labelNode.setAttribute("for",forAttr);
+        labelNode.setAttribute("for", forAttr);
         labelNode.innerHTML = stationName;
         // create input node <input id="sx" type="number"/>
         var inputNode = doc.createElement('input');
-        inputNode.setAttribute("id",forAttr);
-        inputNode.setAttribute("type","number");
+        inputNode.setAttribute("id", forAttr);
+        inputNode.setAttribute("type", "number");
         // create form node
         var formNode = doc.createElement('form');
         formNode.appendChild(labelNode);
@@ -101,18 +101,18 @@ function createStationTable(xmldoc,doc) {
         lengthOfArray = tdNodesArray.push(tdNode);
 //        console.log(lengthOfArray);
     }
-    
+
     var tableNode = doc.createElement('table');
     var numberOfRow;
     var mod = numberOfStation % 6;
-    if (mod === 0 ) {
+    if (mod === 0) {
         numberOfRow = numberOfStation / 6;
     } else {
         numberOfRow = ((numberOfStation - mod) / 6) + 1;
     }
     console.log(numberOfRow);
     var line = 0;
-  // var tdNodes = contianNode.getElementsByTagName('td');
+    // var tdNodes = contianNode.getElementsByTagName('td');
     for (var i = 0; i < numberOfRow; i++) {
         var trNode = doc.createElement('tr');
         var j = line;
@@ -120,7 +120,7 @@ function createStationTable(xmldoc,doc) {
             if (j < numberOfStation) {
                 // trNode.appendChild(tdNodes.item(j));
                 trNode.appendChild(tdNodesArray.shift());
-            } 
+            }
         }
         line = j;
         tableNode.appendChild(trNode);
@@ -132,6 +132,21 @@ function createStationTable(xmldoc,doc) {
 //        }
 //        tableNode.appendChild(trNode);
 //    }
-    
+
     return tableNode;
+}
+
+function getBus(line, xmlHttpR) {
+    var busUrl = "server-script/getBus.php?" + "line=" + line;
+    xmlHttpR.onreadystatechange = function () {
+        if (xmlHttpR.readyState === 4 && xmlHttpR.status === 200) {
+            if (xmlHttpR.responseText === "NULL") {
+                alert('Can not get the bus info from server.');
+            } else {
+                document.getElementById('buslicense').innerHTML = xmlHttpR.responseText;
+            }
+        }
+    };
+    xmlHttpR.open('GET', busUrl, true);
+    xmlHttpR.send();
 }

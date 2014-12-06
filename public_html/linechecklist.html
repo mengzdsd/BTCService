@@ -15,51 +15,6 @@ and open the template in the editor.
             var xmlhttp = new XMLHttpRequest();
             // define the line
             var line = "c58";
-
-            function getBus(line) {
-                var busUrl = "server-script/getBus.php?" + "line=" + line;
-                xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                        if (xmlhttp.responseText === "NULL") {
-                            alert('Can not get the bus info from server.');
-                        } else {
-                            document.getElementById('buslicense').innerHTML = xmlhttp.responseText;
-                        }
-                    }
-                };
-                xmlhttp.open('GET', busUrl, true);
-                xmlhttp.send();
-            }
-
-            function comfirmInputData() {
-//               window.location.reload();
-                var bllEl = document.getElementById('buslinelist');
-                var selDate = document.getElementById('datepicker').value;
-                var busLicense = document.getElementById('buslicense').value;
-                var headText = "<b>日期：</b> " + selDate.toString() + "<b>班车：</b>" + busLicense;
-                bllEl.getElementsByTagName('p')[0].innerHTML = headText;
-
-                var datePair = 'date=' + selDate.toString().replace('-', '').replace('-', '');
-                var busPair = 'bus=' + busLicense.toLocaleString();
-                var linePair = 'line=' + line;
-                var getUrl = 'server-script/getLines.php?' + datePair + '&' + busPair + '&' + linePair;
-//                console.log(getUrl);
-                xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                        if (xmlhttp.responseText === "NULL") {
-//                        alert('Can not get the line info from server.');
-                            var pEl = document.createElement('p');
-                            var tableHead = "<tr><th>班 次</th><th>状 态</th><th>核实人</th><th>核 实</th></tr>";
-                            var noData = "<p>服务器上没有所选日期和班车的数据。</p>";
-                            document.getElementById('listTable').innerHTML = tableHead + noData;
-                        } else {
-                            document.getElementById('listTable').innerHTML = xmlhttp.responseText;
-                        }
-                    }
-                };
-                xmlhttp.open('GET', getUrl, true);
-                xmlhttp.send();
-            }
         </script>
     </head>
     <body>
@@ -82,7 +37,7 @@ and open the template in the editor.
                 </select>
                 <script type="text/javascript">
 //                    var line = 'c58';
-                    getBus(line);
+                    getBus(line, xmlhttp);
                 </script>
                 <button id="confirmbtn" class="btn" onclick="comfirmInputData()">确 定</button>
             </div>
@@ -113,5 +68,36 @@ and open the template in the editor.
         <div id="footer">
 
         </div>
+        <script type="text/javascript">
+            function comfirmInputData() {
+//               window.location.reload();
+                var bllEl = document.getElementById('buslinelist');
+                var selDate = document.getElementById('datepicker').value;
+                var busLicense = document.getElementById('buslicense').value;
+                var headText = "<b>日期：</b> " + selDate.toString() + "<b>班车：</b>" + busLicense;
+                bllEl.getElementsByTagName('p')[0].innerHTML = headText;
+
+                var datePair = 'date=' + selDate.toString().replace('-', '').replace('-', '');
+                var busPair = 'bus=' + busLicense.toLocaleString();
+                var linePair = 'line=' + line;
+                var getUrl = 'server-script/getLines.php?' + datePair + '&' + busPair + '&' + linePair;
+//                console.log(getUrl);
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                        if (xmlhttp.responseText === "NULL") {
+//                        alert('Can not get the line info from server.');
+                            var pEl = document.createElement('p');
+                            var tableHead = "<tr><th>班 次</th><th>状 态</th><th>核实人</th><th>核 实</th></tr>";
+                            var noData = "<p>服务器上没有所选日期和班车的数据。</p>";
+                            document.getElementById('listTable').innerHTML = tableHead + noData;
+                        } else {
+                            document.getElementById('listTable').innerHTML = xmlhttp.responseText;
+                        }
+                    }
+                };
+                xmlhttp.open('GET', getUrl, true);
+                xmlhttp.send();
+            }
+        </script>
     </body>
 </html>

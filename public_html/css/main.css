@@ -15,31 +15,46 @@ body {
 
 #header {
     width: 100%;
-    height: 60px;
+    height: 70px;
     color: #0033ff;
     display: block;
     margin-top: 10px;
     margin-left: 10px;
+    padding: 0px;
 }
 
-#header>#version {
+#header>h3 {
+    position: relative;
+    top: -20px;
+}
+
+#header>p {
     font-size: 12px;
     color: black;
     position: relative;
-    top: -20px;
-//    margin-top: 5px;
+    top: -20px;        
 }
 
-hr {
+#header>hr {
     color: #b3b3b3;
     position: relative;
-    top: -20px;
+    top: -30px;
 }
 
 #header>button {
     float: right;
     position: relative;
-    top: -20px;
+    top: -60px;
+}
+
+#header>h1>a {
+    text-decoration: none;
+}
+#header>h1>a:hover {
+    text-decoration: underline;
+}
+#header>h1>a:visited {
+    color: #0033ff;
 }
 
 #main {
@@ -52,6 +67,11 @@ hr {
 #entrance {
     margin-top: 100px;
     display: block;
+}
+
+#entrance>a {
+    position: relative;
+    top: -10px;
 }
 // end page 1
 

@@ -84,6 +84,15 @@ hr {
 // for page 3
 
 // common
+.red-color {
+    color: red;
+}
+
+.green-color {
+    color: green;
+}
+
+/* bootstrap button */
 .btn-large {
   padding: 11px 19px;
   font-size: 17.5px;
@@ -92,7 +101,6 @@ hr {
           border-radius: 6px;
 }
 
-/* bootstrap button */
 .btn {
   display: inline-block;
   *display: inline;

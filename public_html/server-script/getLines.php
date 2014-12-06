@@ -35,9 +35,11 @@ error_reporting(E_ALL);
 
 //$bus = "粤BAAAAA";
 //$date = "20141121";
-$date = filter_input(INPUT_GET,'date');
-$bus = filter_input(INPUT_GET,'bus');
+$date = filter_input(INPUT_GET, 'date');
+$bus = filter_input(INPUT_GET, 'bus');
 $line = filter_input(INPUT_GET, 'line');
+$isResult = filter_input(INPUT_GET, 'result');
+$isR = ($isResult === 'yes') ? true : false;
 $dataDir = "../linedata/" . $date . '/';
 // echo strlen($bus), PHP_EOL;
 // search ../linedata/<date>/ diretory for bus
@@ -62,7 +64,11 @@ if ($oDir->handle) {
     }
 
     $xmlDoc = new DOMDocument();
-    $strRet = '<tr><th>班 次</th><th>状 态</th><th>核实人</th><th>核 实</th></tr>';
+    if ($isR) {
+        $strRet = '<tr><th>班 次</th><th>状 态</th><th>审核人</th><th>审核结果</th><th>详细信息</th></tr>';
+    } else {
+        $strRet = '<tr><th>班 次</th><th>状 态</th><th>审核人</th><th>审核</th></tr>';
+    }
     foreach ($fileLists as $filename) {
 //        echo $filename, PHP_EOL;
         $filePath = realpath($dataDir . $filename);
@@ -72,10 +78,24 @@ if ($oDir->handle) {
         $checker = "";
         $checkerNodes = $xmlDoc->getElementsByTagName('Checker');
         if ($checkerNodes->length === 0) {
-            $strRet .= "<td class=\"redColor\">未审核</td><td></td><td><a href=\"linecheck.html?id=$idStr&line=$line\">审核</a></td></tr>";
+            if ($isR) {
+                $strRet .= "<td class=\"red-color\">未审核</td><td></td><td></td><td></td></tr>";
+            } else {
+                $strRet .= "<td class=\"red-color\">未审核</td><td></td><td><a href=\"linecheck.html?id=$idStr&line=$line\">审核</a></td></tr>";
+            }
         } else {
             $checker = $checkerNodes->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
-            $strRet .= "<td class=\"greenColor\">已审核</td><td>$checker</td><td><a href=\"linecheck.html?id=$idStr&line=$line\">重审核</a></td></tr>";
+            $checkResult = $xmlDoc->getElementsByTagName('CheckResult')->item(0)->nodeValue;
+
+            if ($isR) {
+                if ($checkResult === 'yes') {
+                    $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td class=\"green-color\">正确</td><td><a href=\"linedetials/\">查看</a></td></tr>";
+                } else {
+                    $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td class=\"red-color\">有问题</td><td><a href=\"linedetials/\">查看</a></td></tr>";
+                }
+            } else {
+                $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td><a href=\"linecheck.html?id=$idStr&line=$line\">重审核</a></td></tr>";
+            }
         }
 //        echo $checker, PHP_EOL;
     }

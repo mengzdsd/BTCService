@@ -146,9 +146,9 @@ if ($lineName && $downCount && $checkerName) {
     
     // check result
     if ($comResult) {
-        $newNodeCheckResult = $docClassInfo->createElement('CheckResult','ture');
+        $newNodeCheckResult = $docClassInfo->createElement('CheckResult','yes');
     } else {
-        $newNodeCheckResult = $docClassInfo->createElement('CheckResult','false');
+        $newNodeCheckResult = $docClassInfo->createElement('CheckResult','no');
     }
     $oldCheckResultNodeList = $docClassInfo->getElementsByTagName('CheckResult');
     if ($oldCheckResultNodeList->length === 0) {

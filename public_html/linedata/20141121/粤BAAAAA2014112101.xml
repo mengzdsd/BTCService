@@ -92,4 +92,5 @@
             <Count>1</Count>
         </Staion>
     </DownCount>
+    <CheckResult>yes</CheckResult>
 </BusLine>

@@ -120,7 +120,37 @@ and open the template in the editor.
         </div>
         <script>
             function submitDownCount() {
-                console.log("Number of Stations: " + numberOfStations);
+//                console.log("Number of Stations: " + numberOfStations);
+                var sendData = "";
+                var downCountStr = "";
+                for (var i = 1; i <= numberOfStations; i++) {
+                    var id = 's' + i;
+                    if (i < numberOfStations) {
+                        downCountStr += (document.getElementById(id).value + ',');
+                    } else {
+                        downCountStr += document.getElementById(id).value;
+                    }
+                }
+
+                var checkerName = window.prompt("请输入您的姓名：");
+                while (!checkerName) {
+                    checkerName = window.prompt("请输入您的姓名：");
+                }
+//                console.log(checkerName);
+                sendData = "line=" + line + '&' + "cid=" + idStr + '&' + "downCount=" + downCountStr + '&' + "checker=" + checkerName;
+                if (window.confirm("确认提交？")) {
+//                    console.log(sendData);
+                    var serverUrl = "server-script/handleData.php";
+                    xmlhttp.open('POST', serverUrl, true);
+                    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xmlhttp.setRequestHeader("Connection", "close");
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                            alert(xmlhttp.responseText);
+                        }
+                    };
+                    xmlhttp.send(sendData);
+                }
             }
         </script>
     </body>

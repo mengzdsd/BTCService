@@ -134,6 +134,9 @@ and open the template in the editor.
 
                 var checkerName = window.prompt("请输入您的姓名：");
                 while (!checkerName) {
+                    if (checkerName === null) {
+                        return false;
+                    }
                     checkerName = window.prompt("请输入您的姓名：");
                 }
 //                console.log(checkerName);

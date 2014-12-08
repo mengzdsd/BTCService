@@ -6,7 +6,7 @@
 	<StartStation>虎门中心站</StartStation>
 	<!-- 终点站 -->
 	<EndStation>南头检查站</EndStation>
-	<Date>20141121</Date>
+	<Date>2014-11-21</Date>
 	<StartTime>08:45:00</StartTime>
 	<StopTime>10:12:00</StopTime>
 	<!-- 售票总数 -->
@@ -75,22 +75,22 @@
     </Checker>
     <!-- 审核信息(从监控视频) -->
     <DownCount>
-        <Staion>
+        <Station>
             <Name>南头检查站</Name>
             <Count>4</Count>
-        </Staion>
-        <Staion>
+        </Station>
+        <Station>
             <Name>沙井中心站</Name>
             <Count>1</Count>
-        </Staion>
-        <Staion>
+        </Station>
+        <Station>
             <Name>松岗医院</Name>
             <Count>2</Count>
-        </Staion>
-        <Staion>
+        </Station>
+        <Station>
             <Name>时代广场</Name>
             <Count>1</Count>
-        </Staion>
+        </Station>
     </DownCount>
     <CheckResult>yes</CheckResult>
 </BusLine>

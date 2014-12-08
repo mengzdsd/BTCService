@@ -89,9 +89,9 @@ if ($oDir->handle) {
 
             if ($isR) {
                 if ($checkResult === 'yes') {
-                    $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td class=\"green-color\">正确</td><td><a href=\"linedetials/\">查看</a></td></tr>";
+                    $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td class=\"green-color\">正确</td><td><a href=\"linedetails/resultdetails.php?id=$idStr\" target=\"_blank\">查看</a></td></tr>";
                 } else {
-                    $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td class=\"red-color\">有问题</td><td><a href=\"linedetials/\">查看</a></td></tr>";
+                    $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td class=\"red-color\">有问题</td><td><a href=\"linedetails/resultdetails.php?id=$idStr\" target=\"_blank\">查看</a></td></tr>";
                 }
             } else {
                 $strRet .= "<td class=\"green-color\">已审核</td><td>$checker</td><td><a href=\"linecheck.html?id=$idStr&line=$line\">重审核</a></td></tr>";

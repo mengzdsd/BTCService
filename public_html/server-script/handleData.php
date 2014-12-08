@@ -110,26 +110,14 @@ if ($lineName && $downCount && $checkerName) {
 
     // 下站人数信息
 //    <DownCount>
-//        <Staion>
+//        <Station>
 //            <Name>南头检查站</Name>
 //            <Count>4</Count>
-//        </Staion>
-//        <Staion>
-//            <Name>沙井中心站</Name>
-//            <Count>1</Count>
-//        </Staion>
-//        <Staion>
-//            <Name>松岗医院</Name>
-//            <Count>2</Count>
-//        </Staion>
-//        <Staion>
-//            <Name>时代广场</Name>
-//            <Count>1</Count>
-//        </Staion>
+//        </Station>
 //    </DownCount>
     $newDownCountNode = $docClassInfo->createElement('DownCount');
     foreach ($arrDC as $key => $value) {
-        $nodeStation = $docClassInfo->createElement('Staion');
+        $nodeStation = $docClassInfo->createElement('Station');
         $nodeName = $docClassInfo->createElement('Name', $key);
         $nodeCount = $docClassInfo->createElement('Count', $value);
         $nodeStation->appendChild($nodeName);

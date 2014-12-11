@@ -29,7 +29,7 @@ and open the template in the editor.
             $stopTime = $classInfoDoc->getElementsByTagName('StopTime')->item(0)->nodeValue;
             $sumTicketsCount = $classInfoDoc->getElementsByTagName('TicketCount')->item(0)->nodeValue;
             $totalAmount = floatval($classInfoDoc->getElementsByTagName('TicketAmount')->item(0)->nodeValue);
-            $strResult = $classInfoDoc->getElementsByTagName('CheckResult')->item(0)->nodeValue;
+            $strResult = $classInfoDoc->getElementsByTagName('CheckResult')->item(0)->getAttribute('result');
             
             $busDriver = [];
             $busDriver['name'] = $classInfoDoc->getElementsByTagName('Driver')->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
@@ -62,6 +62,16 @@ and open the template in the editor.
                 $downCount = $downStationNode->getElementsByTagName('Count')->item(0)->nodeValue;
                 $arrDownCount[$stationName] = $downCount;
             }
+            
+            $arrAbnormalDownCount = [];
+            if ($strResult === 'no') {
+                $abnormalStationsNodeList = $classInfoDoc->getElementsByTagName('AbnormalStations')->item(0)->getElementsByTagName('Station');
+                foreach ($abnormalStationsNodeList as $abnormalStationNode) {
+                    $stationName = $abnormalStationNode->getElementsByTagName('Name')->item(0)->nodeValue;
+                    $lessCount = $abnormalStationNode->getElementsByTagName('LessCount')->item(0)->nodeValue;
+                    $arrAbnormalDownCount[$stationName] = $lessCount;
+                }
+            }
             ?>
         <div id="runTime">
             <?php
@@ -80,9 +90,9 @@ and open the template in the editor.
             <?php
             $pStr = "";
             if ($strResult === 'yes') {
-                $pStr = "<p>审核结果： <span class=\"green-color\">完全匹配</span></p>";
+                $pStr = "<p>审核结果： <span class=\"green-color\">正确</span></p>";
             } else {
-                $pStr = "<p>审核结果： <span class=\"red-color\">有问题</span></p>";
+                $pStr = "<p>审核结果： <span class=\"red-color\">有异常</span></p>";
             }
             echo $pStr;
             ?>
@@ -145,7 +155,7 @@ and open the template in the editor.
             <p>站点下站人数： （来自监控视频的审核）</p>
             <table>
                 <tr>
-                    <th>站点</th>
+                    <th>站名</th>
                     <th>下站人数</th>
                 </tr>
                 <?php
@@ -155,6 +165,20 @@ and open the template in the editor.
                 }
                 ?>
             </table>
+        </div>
+        <div id="abnormalInfo">
+            <?php
+            if ($strResult === 'no') {
+                $pStr = "<p>下面是异常的下站人数：</p>";
+                $tableStr = "<table><tr><th>站名</th><th>过站人数</th></tr>";
+                foreach ($arrAbnormalDownCount as $key => $value) {
+                    $tableStr .= "<tr><td>$key</td><td>$value</td></tr>";
+                }
+                $tableStr .= "</table>";
+                echo $pStr;
+                echo $tableStr;
+            }
+            ?>
         </div>
     </body>
 </html>

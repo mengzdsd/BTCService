@@ -29,7 +29,7 @@ if ($lineName && $downCount && $checkerName) {
     $docStation = new DOMDocument();
     $docStation->load($stationsInfoFile);
     $stationNodeList = $docStation->getElementsByTagName('station');
-    $arrStations = [];
+    $arrStations = []; // used to record the station names
     foreach ($stationNodeList as $station) {
         $idValue = $station->getAttribute('id');
         $stationName = $station->getElementsByTagName('name')->item(0)->nodeValue;
@@ -39,44 +39,41 @@ if ($lineName && $downCount && $checkerName) {
     $docClassInfo = new DOMDocument();
     $docClassInfo->load($classInfoFile);
     $ticketsNodeList = $docClassInfo->getElementsByTagName('Ticket');
-    $arrTicketDownCount = [];
+    $arrTDC = []; // uesd to recored the station name and number of down people should be
     foreach ($ticketsNodeList as $ticketNode) {
         $downStation = $ticketNode->getElementsByTagName('DownStation')->item(0)->nodeValue;
         $ticketCount = $ticketNode->getElementsByTagName('Count')->item(0)->nodeValue;
         $count = 0;
-        if (array_key_exists($downStation, $arrTicketDownCount)) {
-            $count = $arrTicketDownCount[$downStation] + intval($ticketCount);
+        if (array_key_exists($downStation, $arrTDC)) {
+            $count = $arrTDC[$downStation] + intval($ticketCount);
         } else {
             $count = intval($ticketCount);
         }
-        $arrTicketDownCount[$downStation] = $count;
+        $arrTDC[$downStation] = $count;
     }
-//    print_r($arrTicketDownCount);
+//    print_r($arrTDC);
 
     $arrDownCount = preg_split("/,/", $downCount);
-    $arrDC = [];
+    $arrDC = [];   // used to record the stations and down number from vedio check
     for ($i = 0; $i < count($arrDownCount); $i++) {
-        if ($arrDownCount[$i] != 0) {
-            $sId = 's' . ($i + 1);
-            $arrDC[$arrStations[$sId]] = intval($arrDownCount[$i]);
-        }
+        $sId = 's' . ($i + 1);
+        $arrDC[$arrStations[$sId]] = intval($arrDownCount[$i]);
     }
 //    print_r($arrDC);
     //
-    $comResult = false;
-    if (count($arrTicketDownCount) === count($arrDC)) {
-        foreach ($arrDC as $key => $value) {
-            if (array_key_exists($key, $arrTicketDownCount)) {
-                if ($arrTicketDownCount[$key] === $value) {
-                    $comResult = true;
-                } else {
-                    $comResult = false;
-                    break;
-                }
-            } else {
-                $comResult = false;
-                break;
-            }
+    $comResult = true;
+    $expDownCount = 0;
+    $arrErrRecord = []; // used to record exception situation
+    foreach ($arrDC as $key => $value) {
+        if (array_key_exists($key, $arrTDC)) {
+            $expDownCount += ($value - $arrTDC[$key]);
+        } else {
+            $expDownCount += $value;
+        }
+        if ($expDownCount < 0) {
+            // some one stay in bus longer then his ticket, record it here
+            $arrErrRecord[$key] = abs($expDownCount);
+            $comResult = false;
         }
     }
 
@@ -92,14 +89,14 @@ if ($lineName && $downCount && $checkerName) {
 //    </Checker>
 //    echo $docClassInfo->saveXML();
 //    $textNode = $docClassInfo->createTextNode($checkerName);
-    $nodeName = $docClassInfo->createElement('Name',$checkerName);
+    $nodeName = $docClassInfo->createElement('Name', $checkerName);
 //    $NameNode->appendChild($textNode);
     $newCheckerNode = $docClassInfo->createElement('Checker');
     $newCheckerNode->appendChild($nodeName);
-    
+
     // root element
     $busLineNode = $docClassInfo->documentElement;
-    
+
     $oldCheckerNodeList = $docClassInfo->getElementsByTagName('Checker');
     if ($oldCheckerNodeList->length === 0) {
         $busLineNode->appendChild($newCheckerNode);
@@ -117,12 +114,14 @@ if ($lineName && $downCount && $checkerName) {
 //    </DownCount>
     $newDownCountNode = $docClassInfo->createElement('DownCount');
     foreach ($arrDC as $key => $value) {
-        $nodeStation = $docClassInfo->createElement('Station');
-        $nodeName = $docClassInfo->createElement('Name', $key);
-        $nodeCount = $docClassInfo->createElement('Count', $value);
-        $nodeStation->appendChild($nodeName);
-        $nodeStation->appendChild($nodeCount);
-        $newDownCountNode->appendChild($nodeStation);
+        if ($value !== 0) {
+            $nodeStation = $docClassInfo->createElement('Station');
+            $nodeName = $docClassInfo->createElement('Name', $key);
+            $nodeCount = $docClassInfo->createElement('Count', $value);
+            $nodeStation->appendChild($nodeName);
+            $nodeStation->appendChild($nodeCount);
+            $newDownCountNode->appendChild($nodeStation);
+        }
     }
     $oldDownCountNodeList = $docClassInfo->getElementsByTagName('DownCount');
     if ($oldDownCountNodeList->length === 0) {
@@ -131,13 +130,27 @@ if ($lineName && $downCount && $checkerName) {
         $oldDownCountNode = $oldDownCountNodeList->item(0);
         $busLineNode->replaceChild($newDownCountNode, $oldDownCountNode);
     }
-    
+
     // check result
     if ($comResult) {
-        $newNodeCheckResult = $docClassInfo->createElement('CheckResult','yes');
+        $newNodeCheckResult = $docClassInfo->createElement('CheckResult');
+        $newNodeCheckResult->setAttribute('result', 'yes');
     } else {
-        $newNodeCheckResult = $docClassInfo->createElement('CheckResult','no');
+        $newNodeCheckResult = $docClassInfo->createElement('CheckResult');
+        $newNodeCheckResult->setAttribute('result', 'no');
+        // create the exception sations
+        $abnormalStationsNode = $docClassInfo->createElement('AbnormalStations');
+        foreach ($arrErrRecord as $key => $value) {
+            $nodeStation = $docClassInfo->createElement('Station');
+            $nodeName = $docClassInfo->createElement('Name', $key);
+            $nodeLessCount = $docClassInfo->createElement('LessCount', $value);
+            $nodeStation->appendChild($nodeName);
+            $nodeStation->appendChild($nodeLessCount);
+            $abnormalStationsNode->appendChild($nodeStation);
+        }
+        $newNodeCheckResult->appendChild($abnormalStationsNode);
     }
+
     $oldCheckResultNodeList = $docClassInfo->getElementsByTagName('CheckResult');
     if ($oldCheckResultNodeList->length === 0) {
         $busLineNode->appendChild($newNodeCheckResult);
@@ -145,8 +158,6 @@ if ($lineName && $downCount && $checkerName) {
         $oldCheckResultNode = $oldCheckResultNodeList->item(0);
         $busLineNode->replaceChild($newNodeCheckResult, $oldCheckResultNode);
     }
-    
-
 //    echo PHP_EOL;
 //    echo $docClassInfo->saveXML();
     $docClassInfo->save($classInfoFile);

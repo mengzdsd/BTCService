@@ -102,6 +102,20 @@ body {
 // end page 2
 
 // for page 3
+table#downCountTalbe {
+    border-collapse:collapse;
+}
+
+#downCountTalbe td {
+    width: 130px;
+    padding: 3px 7px 2px 7px;
+}
+
+#downCountTalbe input {
+    width: 50px;
+}
+
+// end page 3
 
 // common
 .red-color {

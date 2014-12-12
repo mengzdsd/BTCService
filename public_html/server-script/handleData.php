@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 
 $lineName = filter_input(INPUT_POST, 'line');
 $cId = filter_input(INPUT_POST, 'cid');
-$downCount = filter_input(INPUT_POST, 'downCount');
+$strCounts = filter_input(INPUT_POST, 'count');
 $checkerName = filter_input(INPUT_POST, 'checker');
 //$lineName = "c58";
 //$cId = "粤BAAAAA2014112102";
@@ -19,7 +19,7 @@ $checkerName = filter_input(INPUT_POST, 'checker');
 //$downCount = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4";
 //$checkerName = "Wang";
 
-if ($lineName && $downCount && $checkerName) {
+if ($lineName && $strCounts && $checkerName) {
     echo "服务器已收到数据";
     // 路线站点数据文件
     $stationsInfoFile = realpath("../xml/line/" . $lineName . "-stations.xml");
@@ -53,22 +53,23 @@ if ($lineName && $downCount && $checkerName) {
     }
 //    print_r($arrTDC);
 
-    $arrDownCount = preg_split("/,/", $downCount);
-    $arrDC = [];   // used to record the stations and down number from vedio check
-    for ($i = 0; $i < count($arrDownCount); $i++) {
+    $arrCounts = preg_split("/#/", $strCounts);
+    $arrCountInfos = [];   // used to record the stations and up/down number from vedio check
+    // ("stationName" => ['upNumber', 'downNumber'])
+    for ($i = 0; $i < count($arrCounts); $i++) {
         $sId = 's' . ($i + 1);
-        $arrDC[$arrStations[$sId]] = intval($arrDownCount[$i]);
+        $arrCountInfos[$arrStations[$sId]] = preg_split("/,/", $arrCounts[$i]);
     }
 //    print_r($arrDC);
     //
     $comResult = true;
     $expDownCount = 0;
     $arrErrRecord = []; // used to record exception situation
-    foreach ($arrDC as $key => $value) {
+    foreach ($arrCountInfos as $key => $value) {
         if (array_key_exists($key, $arrTDC)) {
-            $expDownCount += ($value - $arrTDC[$key]);
+            $expDownCount += (intval($value[1]) - $arrTDC[$key]);
         } else {
-            $expDownCount += $value;
+            $expDownCount += intval($value[1]);
         }
         if ($expDownCount < 0) {
             // some one stay in bus longer then his ticket, record it here
@@ -106,29 +107,35 @@ if ($lineName && $downCount && $checkerName) {
     }
 
     // 下站人数信息
-//    <DownCount>
+//    <CountInfo>
 //        <Station>
 //            <Name>南头检查站</Name>
-//            <Count>4</Count>
+//            <UpCount>0</UpCount>
+//            <DownCount>4</DownCount>
 //        </Station>
 //    </DownCount>
-    $newDownCountNode = $docClassInfo->createElement('DownCount');
-    foreach ($arrDC as $key => $value) {
-        if ($value !== 0) {
+    $newCountInfoNode = $docClassInfo->createElement('CountInfo');
+    foreach ($arrCountInfos as $key => $value) {
+        $strUpCount = strval($value[0]);
+        $strDownCount = strval($value[1]);
+//        error_log("Up: $strUpCount , Down: $strDownCount", 0);
+        if ( $strUpCount !== '0' ||  $strDownCount !== '0') {
             $nodeStation = $docClassInfo->createElement('Station');
             $nodeName = $docClassInfo->createElement('Name', $key);
-            $nodeCount = $docClassInfo->createElement('Count', $value);
+            $nodeUpCount = $docClassInfo->createElement('UpCount', $strUpCount);
+            $nodeDownCount = $docClassInfo->createElement('DownCount', $strDownCount);
             $nodeStation->appendChild($nodeName);
-            $nodeStation->appendChild($nodeCount);
-            $newDownCountNode->appendChild($nodeStation);
+            $nodeStation->appendChild($nodeUpCount);
+            $nodeStation->appendChild($nodeDownCount);
+            $newCountInfoNode->appendChild($nodeStation);
         }
     }
-    $oldDownCountNodeList = $docClassInfo->getElementsByTagName('DownCount');
-    if ($oldDownCountNodeList->length === 0) {
-        $busLineNode->appendChild($newDownCountNode);
+    $oldCountInfoNodeList = $docClassInfo->getElementsByTagName('CountInfo');
+    if ($oldCountInfoNodeList->length === 0) {
+        $busLineNode->appendChild($newCountInfoNode);
     } else {
-        $oldDownCountNode = $oldDownCountNodeList->item(0);
-        $busLineNode->replaceChild($newDownCountNode, $oldDownCountNode);
+        $oldCountInfoNode = $oldCountInfoNodeList->item(0);
+        $busLineNode->replaceChild($newCountInfoNode, $oldCountInfoNode);
     }
 
     // check result

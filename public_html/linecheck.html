@@ -23,6 +23,7 @@ and open the template in the editor.
             // used to store number of stations
             var numberOfStations;
 
+            // function to get the stations for a line and insert to the table.
             function createStationsTable(line) {
                 if (line === "") {
                     alert("There is no line info.");
@@ -61,74 +62,32 @@ and open the template in the editor.
             <script type="text/javascript">
                 document.getElementById('idp').innerHTML = "<p><b>班次：</b>" + idStr + "</p>";
             </script>
-            <p>请查看监控视频，输入站点的下车人数：</p>
+            <p>请查看监控视频，输入站点的<strong>上车</strong>和<strong>下车</strong>人数：</p>
             <div id="downCountbox">
-                <!--                <table>
-                                    <tr>
-                                        <td>
-                                            <label for="s1">AAAAAA</label>
-                                            <input id="s1" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s2">AAAAAA</label>
-                                            <input id="s2" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s3">AAAAAA</label>
-                                            <input id="s3" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s4">AAAAAA</label>
-                                            <input id="s4" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s5">AAAAAA</label>
-                                            <input id="s5" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s6">AAAAAA</label>
-                                            <input id="s6" type="number" min="0" value="0">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="s7">AAAAAA</label>
-                                            <input id="s7" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s8">AAAAAA</label>
-                                            <input id="s8" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s9">AAAAAA</label>
-                                            <input id="s9" type="number" min="0" value="0">
-                                        </td>
-                                        <td>
-                                            <label for="s10">AAAAAA</label>
-                                            <input id="s10" type="number" min="0" value="0">
-                                        </td>
-                                    </tr>
-                                </table>-->
+                
             </div>
             <script>
                 createStationsTable(line);
             </script>
-            <div id="submitDownCount">
+            <div id="summitBtn">
                 <br/>
                 <button class="btn" onclick="submitDownCount()">提 交</button>
+                <button class="btn" onclick="resetInput()">重 置</button>
             </div>
         </div>
         <script>
+            // funciton to submit the up and down count to server
             function submitDownCount() {
 //                console.log("Number of Stations: " + numberOfStations);
                 var sendData = "";
-                var downCountStr = "";
+                var countStr = "";
                 for (var i = 1; i <= numberOfStations; i++) {
-                    var id = 's' + i;
+                    var idU = 's' + i + 'u';
+                    var idD = 's' + i + 'd';
                     if (i < numberOfStations) {
-                        downCountStr += (document.getElementById(id).value + ',');
+                        countStr += (document.getElementById(idU).value + ',' + document.getElementById(idD).value + '#');
                     } else {
-                        downCountStr += document.getElementById(id).value;
+                        countStr += (document.getElementById(idU).value + ',' + document.getElementById(idD).value);
                     }
                 }
 
@@ -140,7 +99,7 @@ and open the template in the editor.
                     checkerName = window.prompt("请输入您的姓名：");
                 }
 //                console.log(checkerName);
-                sendData = "line=" + line + '&' + "cid=" + idStr + '&' + "downCount=" + downCountStr + '&' + "checker=" + checkerName;
+                sendData = "line=" + line + '&' + "cid=" + idStr + '&' + "count=" + countStr + '&' + "checker=" + checkerName;
                 if (window.confirm("确认提交？")) {
 //                    console.log(sendData);
                     var serverUrl = "server-script/handleData.php";
@@ -153,6 +112,16 @@ and open the template in the editor.
                         }
                     };
                     xmlhttp.send(sendData);
+                }
+            }
+            
+            // fucntion to reset all input value to 0
+            function resetInput() {
+                for (var i = 1; i <= numberOfStations; i++) {
+                    var inputIdValueU = 's' + i + 'u';
+                    var inputIdValueD = 's' + i + 'd';
+                    document.getElementById(inputIdValueU).value = 0;
+                    document.getElementById(inputIdValueD).value = 0;
                 }
             }
         </script>

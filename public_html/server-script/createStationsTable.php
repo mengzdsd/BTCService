@@ -12,49 +12,59 @@
  * 接收日期[line]作为输入参数
  * 返回含<table> element的字符串
  * <table>样例
- * <table>
+ * <table id="downCountTalbe">
   <tr>
   <td>
-  <label for="s1">AAAAAA</label>
-  <input id="s1" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s1u" type="number" min="0" value="0">
+  <input id="s1d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s2">AAAAAA</label>
-  <input id="s2" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s2u" type="number" min="0" value="0">
+  <input id="s2d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s3">AAAAAA</label>
-  <input id="s3" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s3u" type="number" min="0" value="0">
+  <input id="s3d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s4">AAAAAA</label>
-  <input id="s4" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s4u" type="number" min="0" value="0">
+  <input id="s4d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s5">AAAAAA</label>
-  <input id="s5" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s5u" type="number" min="0" value="0">
+  <input id="s5d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s6">AAAAAA</label>
-  <input id="s6" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s6u" type="number" min="0" value="0">
+  <input id="s6d" type="number" min="0" value="0">
   </td>
   </tr>
   <tr>
   <td>
-  <label for="s7">AAAAAA</label>
-  <input id="s7" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s7u" type="number" min="0" value="0">
+  <input id="s7d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s8">AAAAAA</label>
-  <input id="s8" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s8u" type="number" min="0" value="0">
+  <input id="s8d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s9">AAAAAA</label>
-  <input id="s9" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s9u" type="number" min="0" value="0">
+  <input id="s9d" type="number" min="0" value="0">
   </td>
   <td>
-  <label for="s10">AAAAAA</label>
-  <input id="s10" type="number" min="0" value="0">
+  AAAAAA(上/下)
+  <input id="s10u" type="number" min="0" value="0">
+  <input id="s10d" type="number" min="0" value="0">
   </td>
   </tr>
   </table>
@@ -72,14 +82,21 @@ $strRet = "";
 
 if ($xmlDoc->load($stationsInfoFile)) {
 //    echo "Open file Success.\n";
-    $strRet = '<table><tr>';
+    $strRet = <<<'EOD'
+<table id="downCountTalbe">
+<tr>
+EOD;
+    
     $sep = 1;
     $stationNodeList = $xmlDoc->getElementsByTagName('station');
     foreach ($stationNodeList as $station) {
-        $idValue = $station->getAttribute('id');
-        $stationName = $station->getElementsByTagName('name')->item(0)->nodeValue;
-//        echo $idValue . '->' . $stationName, PHP_EOL;
-        $strRet .= "<td><label for=\"$idValue\">$stationName</label><input id=\"$idValue\" type=\"number\" min=\"0\" value=\"0\"></td>";
+        $idValue = $station->getAttribute('id');    // station id
+        $stationName = $station->getElementsByTagName('name')->item(0)->nodeValue;      // Station name
+        $upIdValue = $idValue . 'u';
+        $downIdValue = $idValue . 'd';
+        
+        $strTd = "<td>$stationName(上/下)<br/>\n<input id=\"$upIdValue\" type=\"number\" min=\"0\" value=\"0\">\n<input id=\"$downIdValue\" type=\"number\" min=\"0\" value=\"0\">\n</td>\n";
+        $strRet .= $strTd;
         if (($sep % 6) === 0) {
             $strRet .= "</tr><tr>";
         }

@@ -39,33 +39,50 @@ if ($lineName && $strCounts && $checkerName) {
     $docClassInfo = new DOMDocument();
     $docClassInfo->load($classInfoFile);
     $ticketsNodeList = $docClassInfo->getElementsByTagName('Ticket');
+    $arrTUC = []; // used to recored the station name and number of up people should be
     $arrTDC = []; // uesd to recored the station name and number of down people should be
     foreach ($ticketsNodeList as $ticketNode) {
+        $upStation = $ticketNode->getElementsByTagName('UpStation')->item(0)->nodeValue;
         $downStation = $ticketNode->getElementsByTagName('DownStation')->item(0)->nodeValue;
         $ticketCount = $ticketNode->getElementsByTagName('Count')->item(0)->nodeValue;
-        $count = 0;
-        if (array_key_exists($downStation, $arrTDC)) {
-            $count = $arrTDC[$downStation] + intval($ticketCount);
+        $countDown = 0;
+        $countUp = 0;
+        if (array_key_exists($upStation, $arrTUC)) {
+            $countUp = $arrTUC[$upStation] + intval($ticketCount);
         } else {
-            $count = intval($ticketCount);
+            $countUp = intval($ticketCount);
         }
-        $arrTDC[$downStation] = $count;
+        $arrTUC[$upStation] = $countUp;
+        if (array_key_exists($downStation, $arrTDC)) {
+            $countDown = $arrTDC[$downStation] + intval($ticketCount);
+        } else {
+            $countDown = intval($ticketCount);
+        }
+        $arrTDC[$downStation] = $countDown;
     }
-//    print_r($arrTDC);
 
-    $arrCounts = preg_split("/#/", $strCounts);
+    $arrCounts = explode('#', $strCounts);
     $arrCountInfos = [];   // used to record the stations and up/down number from vedio check
     // ("stationName" => ['upNumber', 'downNumber'])
     for ($i = 0; $i < count($arrCounts); $i++) {
         $sId = 's' . ($i + 1);
-        $arrCountInfos[$arrStations[$sId]] = preg_split("/,/", $arrCounts[$i]);
+        $arrCountInfos[$arrStations[$sId]] = explode(',', $arrCounts[$i]);
     }
-//    print_r($arrDC);
-    //
+
+    // Calculate the date from the video and the tickets, and record the abnormal up and down counts
     $comResult = true;
     $expDownCount = 0;
-    $arrErrRecord = []; // used to record exception situation
+    $arrAbnormalUpRecord = [];
+    $arrAbnormalDownRecord = []; // used to record exception situation
     foreach ($arrCountInfos as $key => $value) {
+        if (array_key_exists($key, $arrTUC)) {
+            if (intval($value[0]) !== $arrTUC[$key]) {
+                // have some one do not buy the ticket or the seller do not ticket
+                $arrAbnormalUpRecord[$key] = intval($value[0]) - $arrTUC[$key]; 
+                $comResult = false;
+            }
+        }
+
         if (array_key_exists($key, $arrTDC)) {
             $expDownCount += (intval($value[1]) - $arrTDC[$key]);
         } else {
@@ -73,7 +90,7 @@ if ($lineName && $strCounts && $checkerName) {
         }
         if ($expDownCount < 0) {
             // some one stay in bus longer then his ticket, record it here
-            $arrErrRecord[$key] = abs($expDownCount);
+            $arrAbnormalDownRecord[$key] = abs($expDownCount);
             $comResult = false;
         }
     }
@@ -119,7 +136,7 @@ if ($lineName && $strCounts && $checkerName) {
         $strUpCount = strval($value[0]);
         $strDownCount = strval($value[1]);
 //        error_log("Up: $strUpCount , Down: $strDownCount", 0);
-        if ( $strUpCount !== '0' ||  $strDownCount !== '0') {
+        if ($strUpCount !== '0' || $strDownCount !== '0') {
             $nodeStation = $docClassInfo->createElement('Station');
             $nodeName = $docClassInfo->createElement('Name', $key);
             $nodeUpCount = $docClassInfo->createElement('UpCount', $strUpCount);
@@ -145,15 +162,29 @@ if ($lineName && $strCounts && $checkerName) {
     } else {
         $newNodeCheckResult = $docClassInfo->createElement('CheckResult');
         $newNodeCheckResult->setAttribute('result', 'no');
-        // create the exception sations
+        // create the abnormal sations
         $abnormalStationsNode = $docClassInfo->createElement('AbnormalStations');
-        foreach ($arrErrRecord as $key => $value) {
-            $nodeStation = $docClassInfo->createElement('Station');
-            $nodeName = $docClassInfo->createElement('Name', $key);
-            $nodeLessCount = $docClassInfo->createElement('LessCount', $value);
-            $nodeStation->appendChild($nodeName);
-            $nodeStation->appendChild($nodeLessCount);
-            $abnormalStationsNode->appendChild($nodeStation);
+
+        if (!empty($arrAbnormalUpRecord)) {
+            foreach ($arrAbnormalUpRecord as $key => $value) {
+                $nodeStation = $docClassInfo->createElement('UpStation');
+                $nodeName = $docClassInfo->createElement('Name', $key);
+                $nodeMoreCount = $docClassInfo->createElement('MoreCount', $value);
+                $nodeStation->appendChild($nodeName);
+                $nodeStation->appendChild($nodeMoreCount);
+                $abnormalStationsNode->appendChild($nodeStation);
+            }
+        }
+
+        if (!empty($arrAbnormalDownRecord)) {
+            foreach ($arrAbnormalDownRecord as $key => $value) {
+                $nodeStation = $docClassInfo->createElement('DownStation');
+                $nodeName = $docClassInfo->createElement('Name', $key);
+                $nodeLessCount = $docClassInfo->createElement('LessCount', $value);
+                $nodeStation->appendChild($nodeName);
+                $nodeStation->appendChild($nodeLessCount);
+                $abnormalStationsNode->appendChild($nodeStation);
+            }
         }
         $newNodeCheckResult->appendChild($abnormalStationsNode);
     }

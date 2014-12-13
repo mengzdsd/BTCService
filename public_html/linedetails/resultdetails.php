@@ -7,7 +7,10 @@ and open the template in the editor.
 <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <title><?php $classId = filter_input(INPUT_GET, 'id'); echo $classId; ?></title>
+        <title><?php
+            $classId = filter_input(INPUT_GET, 'id');
+            echo $classId;
+            ?></title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </head>
@@ -19,63 +22,77 @@ and open the template in the editor.
             ?>
         </div>
         <?php
-            $classInfoFile = realpath("../linedata/" . substr($classId, 9, 8) . "/$classId.xml");
-            $classInfoDoc = new DOMDocument();
-            $classInfoDoc->load($classInfoFile);
-            $startStation = $classInfoDoc->getElementsByTagName('StartStation')->item(0)->nodeValue;
-            $endStation = $classInfoDoc->getElementsByTagName('EndStation')->item(0)->nodeValue;
-            $runDate = $classInfoDoc->getElementsByTagName('Date')->item(0)->nodeValue;
-            $startTime = $classInfoDoc->getElementsByTagName('StartTime')->item(0)->nodeValue;
-            $stopTime = $classInfoDoc->getElementsByTagName('StopTime')->item(0)->nodeValue;
-            $sumTicketsCount = $classInfoDoc->getElementsByTagName('TicketCount')->item(0)->nodeValue;
-            $totalAmount = floatval($classInfoDoc->getElementsByTagName('TicketAmount')->item(0)->nodeValue);
-            $strResult = $classInfoDoc->getElementsByTagName('CheckResult')->item(0)->getAttribute('result');
-            
-            $busDriver = [];
-            $busDriver['name'] = $classInfoDoc->getElementsByTagName('Driver')->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
-            $busDriver['callnumber'] = $classInfoDoc->getElementsByTagName('Driver')->item(0)->getElementsByTagName('CallNumber')->item(0)->nodeValue;
-            $ticketSeller = [];
-            $ticketSeller['name'] = $classInfoDoc->getElementsByTagName('TicketSeller')->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
-            $ticketSeller['callnumber'] = $classInfoDoc->getElementsByTagName('TicketSeller')->item(0)->getElementsByTagName('CallNumber')->item(0)->nodeValue;
-            
-            $ticketsNodeList = $classInfoDoc->getElementsByTagName('Ticket');
-            $arrTickets = [];
-            foreach ($ticketsNodeList as $ticketNode) {
-                $upStation = $ticketNode->getElementsByTagName('UpStation')->item(0)->nodeValue;
-                $downStation = $ticketNode->getElementsByTagName('DownStation')->item(0)->nodeValue;
-                $ticketCount = $ticketNode->getElementsByTagName('Count')->item(0)->nodeValue;
-                $ticketPrice = floatval($ticketNode->getElementsByTagName('Price')->item(0)->nodeValue);
-                $ticketFee = $ticketPrice * $ticketCount;
-                $stationKey = $upStation . '-' . $downStation;
-                if (array_key_exists($stationKey, $arrTickets)) {
-                    $ticketCount = $arrTickets[$stationKey][0] + $ticketCount;
-                    $ticketFee = $arrTickets[$stationKey][1] + $ticketFee;
-                    $arrTickets[$stationKey] = [$ticketPrice, $ticketCount, $ticketFee];
-                }
+        $classInfoFile = realpath("../linedata/" . substr($classId, 9, 8) . "/$classId.xml");
+        $classInfoDoc = new DOMDocument();
+        $classInfoDoc->load($classInfoFile);
+        $startStation = $classInfoDoc->getElementsByTagName('StartStation')->item(0)->nodeValue;
+        $endStation = $classInfoDoc->getElementsByTagName('EndStation')->item(0)->nodeValue;
+        $runDate = $classInfoDoc->getElementsByTagName('Date')->item(0)->nodeValue;
+        $startTime = $classInfoDoc->getElementsByTagName('StartTime')->item(0)->nodeValue;
+        $stopTime = $classInfoDoc->getElementsByTagName('StopTime')->item(0)->nodeValue;
+        $sumTicketsCount = $classInfoDoc->getElementsByTagName('TicketCount')->item(0)->nodeValue;
+        $totalAmount = floatval($classInfoDoc->getElementsByTagName('TicketAmount')->item(0)->nodeValue);
+        $strResult = $classInfoDoc->getElementsByTagName('CheckResult')->item(0)->getAttribute('result');
+
+        $busDriver = [];
+        $busDriver['name'] = $classInfoDoc->getElementsByTagName('Driver')->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
+        $busDriver['callnumber'] = $classInfoDoc->getElementsByTagName('Driver')->item(0)->getElementsByTagName('CallNumber')->item(0)->nodeValue;
+        $ticketSeller = [];
+        $ticketSeller['name'] = $classInfoDoc->getElementsByTagName('TicketSeller')->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
+        $ticketSeller['callnumber'] = $classInfoDoc->getElementsByTagName('TicketSeller')->item(0)->getElementsByTagName('CallNumber')->item(0)->nodeValue;
+
+        $ticketsNodeList = $classInfoDoc->getElementsByTagName('Ticket');
+        $arrTickets = [];
+        foreach ($ticketsNodeList as $ticketNode) {
+            $upStation = $ticketNode->getElementsByTagName('UpStation')->item(0)->nodeValue;
+            $downStation = $ticketNode->getElementsByTagName('DownStation')->item(0)->nodeValue;
+            $ticketCount = $ticketNode->getElementsByTagName('Count')->item(0)->nodeValue;
+            $ticketPrice = floatval($ticketNode->getElementsByTagName('Price')->item(0)->nodeValue);
+            $ticketFee = $ticketPrice * $ticketCount;
+            $stationKey = $upStation . '-' . $downStation;
+            if (array_key_exists($stationKey, $arrTickets)) {
+                $ticketCount = $arrTickets[$stationKey][0] + $ticketCount;
+                $ticketFee = $arrTickets[$stationKey][1] + $ticketFee;
                 $arrTickets[$stationKey] = [$ticketPrice, $ticketCount, $ticketFee];
             }
-            
-            $downStationNodeList = $classInfoDoc->getElementsByTagName('DownCount')->item(0)->getElementsByTagName('Station');
-            $arrDownCount = [];
-            foreach ($downStationNodeList as $downStationNode) {
-                $stationName = $downStationNode->getElementsByTagName('Name')->item(0)->nodeValue;
-                $downCount = $downStationNode->getElementsByTagName('Count')->item(0)->nodeValue;
-                $arrDownCount[$stationName] = $downCount;
+            $arrTickets[$stationKey] = [$ticketPrice, $ticketCount, $ticketFee];
+        }
+
+        $downStationNodeList = $classInfoDoc->getElementsByTagName('CountInfo')->item(0)->getElementsByTagName('Station');
+        $arrStationCount = [];
+        foreach ($downStationNodeList as $downStationNode) {
+            $stationName = $downStationNode->getElementsByTagName('Name')->item(0)->nodeValue;
+            $upCount = $downStationNode->getElementsByTagName('UpCount')->item(0)->nodeValue;
+            $downCount = $downStationNode->getElementsByTagName('DownCount')->item(0)->nodeValue;
+            $arrStationCount[$stationName] = array($upCount, $downCount);
+        }
+        
+
+        $arrAbnormalUpCount = [];
+        $arrAbnormalDownCount = [];
+        if ($strResult === 'no') {
+            $abnormalStationsNode = $classInfoDoc->getElementsByTagName('AbnormalStations')->item(0);
+            $abnormalUpStationsNodeList = $abnormalStationsNode->getElementsByTagName('UpStation');
+            if (!empty($abnormalUpStationsNodeList)) {
+                foreach ($abnormalUpStationsNodeList as $abnormalStationNode) {
+                    $stationName = $abnormalStationNode->getElementsByTagName('Name')->item(0)->nodeValue;
+                    $moreCount = $abnormalStationNode->getElementsByTagName('MoreCount')->item(0)->nodeValue;
+                    $arrAbnormalUpCount[$stationName] = $moreCount;
+                }
             }
-            
-            $arrAbnormalDownCount = [];
-            if ($strResult === 'no') {
-                $abnormalStationsNodeList = $classInfoDoc->getElementsByTagName('AbnormalStations')->item(0)->getElementsByTagName('Station');
-                foreach ($abnormalStationsNodeList as $abnormalStationNode) {
+            $abnormalDownStationsNodeList = $abnormalStationsNode->getElementsByTagName('DownStation');
+            if (!empty($abnormalDownStationsNodeList)) {
+                foreach ($abnormalDownStationsNodeList as $abnormalStationNode) {
                     $stationName = $abnormalStationNode->getElementsByTagName('Name')->item(0)->nodeValue;
                     $lessCount = $abnormalStationNode->getElementsByTagName('LessCount')->item(0)->nodeValue;
                     $arrAbnormalDownCount[$stationName] = $lessCount;
                 }
             }
-            ?>
+        }
+        ?>
         <div id="runTime">
             <?php
-            $arDate = preg_split("/-/", $runDate); 
+            $arDate = explode('-', $runDate);
             $pRunTime = "<p>运行时间： $arDate[0]年$arDate[1]月$arDate[2]日 $startTime - $stopTime</p>";
             echo $pRunTime;
             ?>
@@ -151,16 +168,17 @@ and open the template in the editor.
                 ?>
             </table>
         </div>
-        <div id="downInfo">
-            <p>站点下站人数： （来自监控视频的审核）</p>
+        <div id="updownInfo">
+            <p>站点上下站人数： （来自监控视频的审核）</p>
             <table>
                 <tr>
                     <th>站名</th>
+                    <th>上站人数</th>
                     <th>下站人数</th>
                 </tr>
                 <?php
-                foreach ($arrDownCount as $key => $value) {
-                    $strContent = "<tr><td>$key</td><td>$value</td></tr>";
+                foreach ($arrStationCount as $key => $value) {
+                    $strContent = "<tr><td>$key</td><td>$value[0]</td><td>$value[1]</td></tr>";
                     echo $strContent;
                 }
                 ?>
@@ -169,14 +187,27 @@ and open the template in the editor.
         <div id="abnormalInfo">
             <?php
             if ($strResult === 'no') {
-                $pStr = "<p>下面是异常的下站人数：</p>";
-                $tableStr = "<table><tr><th>站名</th><th>过站人数</th></tr>";
-                foreach ($arrAbnormalDownCount as $key => $value) {
-                    $tableStr .= "<tr><td>$key</td><td>$value</td></tr>";
+                if (!empty($arrAbnormalUpCount)) {
+                    $pStr = "<p>下面是异常的上站人数：</p>";
+                    $tableStr = "<table><tr><th>站名</th><th>无票人数</th></tr>";
+                    foreach ($arrAbnormalUpCount as $key => $value) {
+                        $tableStr .= "<tr><td>$key</td><td>$value</td></tr>";
+                    }
+                    $tableStr .= "</table>";
+                    echo $pStr;
+                    echo $tableStr;
                 }
-                $tableStr .= "</table>";
-                echo $pStr;
-                echo $tableStr;
+
+                if (!empty($arrAbnormalDownCount)) {
+                    $pStr = "<p>下面是异常的下站人数：</p>";
+                    $tableStr = "<table><tr><th>站名</th><th>过站人数</th></tr>";
+                    foreach ($arrAbnormalDownCount as $key => $value) {
+                        $tableStr .= "<tr><td>$key</td><td>$value</td></tr>";
+                    }
+                    $tableStr .= "</table>";
+                    echo $pStr;
+                    echo $tableStr;
+                }
             }
             ?>
         </div>

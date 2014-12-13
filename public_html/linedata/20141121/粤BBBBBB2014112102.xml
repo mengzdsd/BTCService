@@ -6,7 +6,7 @@
 	<StartStation>虎门中心站</StartStation>
 	<!-- 终点站 -->
 	<EndStation>南头检查站</EndStation>
-	<Date>20141121</Date>
+	<Date>2014-11-21</Date>
 	<StartTime>08:45:00</StartTime>
 	<StopTime>10:12:00</StopTime>
 	<!-- 售票总数 -->

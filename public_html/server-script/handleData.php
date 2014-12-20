@@ -20,7 +20,7 @@ $checkerName = filter_input(INPUT_POST, 'checker');
 //$checkerName = "Wang";
 
 if ($lineName && $strCounts && $checkerName) {
-    echo "服务器已收到数据";
+//    echo "服务器已收到数据";
     // 路线站点数据文件
     $stationsInfoFile = realpath("../xml/line/" . $lineName . "-stations.xml");
     $dateStr = substr($cId, 9, 8) . '/';
@@ -199,6 +199,8 @@ if ($lineName && $strCounts && $checkerName) {
 //    echo PHP_EOL;
 //    echo $docClassInfo->saveXML();
     $docClassInfo->save($classInfoFile);
+    
+    echo "yes";
 } else {
-    echo "服务器收到数据有错，请重新提交";
+    echo "no";
 }

@@ -64,20 +64,22 @@ and open the template in the editor.
             </script>
             <p>请查看监控视频，输入站点的<strong>上车</strong>和<strong>下车</strong>人数：</p>
             <div id="downCountbox">
-                
+
             </div>
             <script>
                 createStationsTable(line);
             </script>
             <div id="summitBtn">
                 <br/>
-                <button class="btn" onclick="submitDownCount()">提 交</button>
+                <button class="btn" onclick="submitCount()">提 交</button>
                 <button class="btn" onclick="resetInput()">重 置</button>
             </div>
         </div>
+        <div id="tempInfo">
+        </div>
         <script>
             // funciton to submit the up and down count to server
-            function submitDownCount() {
+            function submitCount() {
 //                console.log("Number of Stations: " + numberOfStations);
                 var sendData = "";
                 var countStr = "";
@@ -108,13 +110,23 @@ and open the template in the editor.
                     xmlhttp.setRequestHeader("Connection", "close");
                     xmlhttp.onreadystatechange = function () {
                         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                            alert(xmlhttp.responseText);
+                            document.getElementById('tempInfo').innerHTML = "";
+                            if (xmlhttp.responseText === 'yes') {
+                                var strInfo = "数据已处理完成\n是否查看结果？";
+                                if (window.confirm(strInfo)) {
+                                    var url = window.location.origin + "/linedetails/resultdetails.php?id=" + idStr;
+                                    window.open(url, "_blank");
+                                }
+                            } else {
+                                window.alert("提交数据有误，请检查后再次提交");
+                            }
                         }
                     };
                     xmlhttp.send(sendData);
+                    document.getElementById('tempInfo').innerHTML = "<p>数据已提交至服务器处理，请等待。。。</p>";
                 }
             }
-            
+
             // fucntion to reset all input value to 0
             function resetInput() {
                 for (var i = 1; i <= numberOfStations; i++) {

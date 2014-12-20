@@ -1,0 +1,62 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 20, 2014, 9:33:21 PM
+    Author     : mengz
+*/
+body {
+    width: 90%;
+    font: 16px Arial, Helvetica, cans-serif;
+    background-color: #dddddd;
+}
+
+.green-color {
+    color: green;
+}
+
+.red-color {
+    color: red;
+}
+
+.bolder {
+    font-weight: bolder;
+}
+
+#shiftId {
+    color: blue;
+    font-size: 1.3em;
+}
+
+.tableBox {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    padding-left: 2px;
+    empty-cells: hide;
+}
+
+table caption {
+    text-align: left;
+    border-bottom: .1em solid #4ca;
+}
+
+table th, table td {
+    padding: 3px 7px 2px 7px;
+    border:1px solid #7a7;
+}
+
+table th {
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: #A7C942;
+    color: #ffffff;
+}

@@ -13,13 +13,15 @@ and open the template in the editor.
             ?></title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="/css/details.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <div id="shiftId">
             <?php
-            $classInfo = "<p>班次： " . $classId . "</p>";
+            $classInfo = "<p><span class=\"bolder\">班次： </span>" . $classId . "</p>";
             echo $classInfo;
             ?>
+            <hr/>
         </div>
         <?php
         $classInfoFile = realpath("../linedata/" . substr($classId, 9, 8) . "/$classId.xml");
@@ -49,7 +51,7 @@ and open the template in the editor.
             $ticketCount = $ticketNode->getElementsByTagName('Count')->item(0)->nodeValue;
             $ticketPrice = floatval($ticketNode->getElementsByTagName('Price')->item(0)->nodeValue);
             $ticketFee = $ticketPrice * $ticketCount;
-            $stationKey = $upStation . '-' . $downStation;
+            $stationKey = $upStation . ' - ' . $downStation;
             if (array_key_exists($stationKey, $arrTickets)) {
                 $ticketCount = $arrTickets[$stationKey][0] + $ticketCount;
                 $ticketFee = $arrTickets[$stationKey][1] + $ticketFee;
@@ -93,13 +95,13 @@ and open the template in the editor.
         <div id="runTime">
             <?php
             $arDate = explode('-', $runDate);
-            $pRunTime = "<p>运行时间： $arDate[0]年$arDate[1]月$arDate[2]日 $startTime - $stopTime</p>";
+            $pRunTime = "<p><span class=\"bolder\">运行时间：</span> $arDate[0]年$arDate[1]月$arDate[2]日 $startTime - $stopTime</p>";
             echo $pRunTime;
             ?>
         </div>
         <div id="totalAmount">
             <?php
-            $pAmount = "<p>售票总金额： " . number_format($totalAmount, 2) . " 元</p>";
+            $pAmount = "<p><span class=\"bolder\">售票总金额：</span> " . number_format($totalAmount, 2) . " 元</p>";
             echo $pAmount;
             ?>
         </div>
@@ -107,17 +109,17 @@ and open the template in the editor.
             <?php
             $pStr = "";
             if ($strResult === 'yes') {
-                $pStr = "<p>审核结果： <span class=\"green-color\">正确</span></p>";
+                $pStr = "<p><span class=\"bolder\">审核结果：</span> <span class=\"green-color\">正确</span></p>";
             } else {
-                $pStr = "<p>审核结果： <span class=\"red-color\">有异常</span></p>";
+                $pStr = "<p><span class=\"bolder\">审核结果：</span> <span class=\"red-color\">有异常</span></p>";
             }
             echo $pStr;
             ?>
         </div>
-        <div id="eeInfo">
+        <div id="eeInfoTable" class="tableBox">
             <table>
                 <tr>
-                    <th></th>
+                    <th>车上员工</th>
                     <th>姓名</th>
                     <th>电话</th>
                 </tr>
@@ -149,9 +151,9 @@ and open the template in the editor.
                 </tr>
             </table>
         </div>
-        <div id="ticketInfo">
-            <p>售票信息：</p>
+        <div id="ticketInfo" class="tableBox">
             <table>
+                <caption class="bolder">售票信息：</caption>
                 <tr>
                     <th>区间</th>
                     <th>单价</th>
@@ -168,9 +170,9 @@ and open the template in the editor.
                 ?>
             </table>
         </div>
-        <div id="updownInfo">
-            <p>站点上下站人数： （来自监控视频的审核）</p>
+        <div id="countInfo" class="tableBox">
             <table>
+                <caption><span class="bolder">站点上下站人数：</span> （来自监控视频的审核）</caption>
                 <tr>
                     <th>站名</th>
                     <th>上站人数</th>
@@ -184,28 +186,24 @@ and open the template in the editor.
                 ?>
             </table>
         </div>
-        <div id="abnormalInfo">
+        <div id="abnormalInfo" class="tableBox">
             <?php
             if ($strResult === 'no') {
                 if (!empty($arrAbnormalUpCount)) {
-                    $pStr = "<p>下面是异常的上站人数：</p>";
-                    $tableStr = "<table><tr><th>站名</th><th>无票人数</th></tr>";
+                    $tableStr = "<table><caption class=\"bolder\">下面是异常的上站人数：</caption><tr><th>站名</th><th>无票人数</th></tr>";
                     foreach ($arrAbnormalUpCount as $key => $value) {
                         $tableStr .= "<tr><td>$key</td><td>$value</td></tr>";
                     }
                     $tableStr .= "</table>";
-                    echo $pStr;
                     echo $tableStr;
                 }
 
                 if (!empty($arrAbnormalDownCount)) {
-                    $pStr = "<p>下面是异常的下站人数：</p>";
-                    $tableStr = "<table><tr><th>站名</th><th>过站人数</th></tr>";
+                    $tableStr = "<table><caption class=\"bolder\">下面是异常的下站人数：</caption><tr><th>站名</th><th>过站人数</th></tr>";
                     foreach ($arrAbnormalDownCount as $key => $value) {
                         $tableStr .= "<tr><td>$key</td><td>$value</td></tr>";
                     }
                     $tableStr .= "</table>";
-                    echo $pStr;
                     echo $tableStr;
                 }
             }

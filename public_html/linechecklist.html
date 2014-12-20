@@ -86,7 +86,6 @@ and open the template in the editor.
                     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                         if (xmlhttp.responseText === "NULL") {
 //                        alert('Can not get the line info from server.');
-                            var pEl = document.createElement('p');
                             var tableHead = "<tr><th>班 次</th><th>状 态</th><th>核实人</th><th>核 实</th></tr>";
                             var noData = "<p>服务器上没有所选日期和班车的数据。</p>";
                             document.getElementById('listTable').innerHTML = tableHead + noData;

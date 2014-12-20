@@ -36,10 +36,10 @@ and open the template in the editor.
         $totalAmount = floatval($classInfoDoc->getElementsByTagName('TicketAmount')->item(0)->nodeValue);
         $strResult = $classInfoDoc->getElementsByTagName('CheckResult')->item(0)->getAttribute('result');
 
-        $busDriver = [];
+        $busDriver = array();
         $busDriver['name'] = $classInfoDoc->getElementsByTagName('Driver')->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
         $busDriver['callnumber'] = $classInfoDoc->getElementsByTagName('Driver')->item(0)->getElementsByTagName('CallNumber')->item(0)->nodeValue;
-        $ticketSeller = [];
+        $ticketSeller = array();
         $ticketSeller['name'] = $classInfoDoc->getElementsByTagName('TicketSeller')->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
         $ticketSeller['callnumber'] = $classInfoDoc->getElementsByTagName('TicketSeller')->item(0)->getElementsByTagName('CallNumber')->item(0)->nodeValue;
 
@@ -55,13 +55,13 @@ and open the template in the editor.
             if (array_key_exists($stationKey, $arrTickets)) {
                 $ticketCount = $arrTickets[$stationKey][0] + $ticketCount;
                 $ticketFee = $arrTickets[$stationKey][1] + $ticketFee;
-                $arrTickets[$stationKey] = [$ticketPrice, $ticketCount, $ticketFee];
+                $arrTickets[$stationKey] = array($ticketPrice, $ticketCount, $ticketFee);
             }
-            $arrTickets[$stationKey] = [$ticketPrice, $ticketCount, $ticketFee];
+            $arrTickets[$stationKey] = array($ticketPrice, $ticketCount, $ticketFee);
         }
 
         $downStationNodeList = $classInfoDoc->getElementsByTagName('CountInfo')->item(0)->getElementsByTagName('Station');
-        $arrStationCount = [];
+        $arrStationCount = array();
         foreach ($downStationNodeList as $downStationNode) {
             $stationName = $downStationNode->getElementsByTagName('Name')->item(0)->nodeValue;
             $upCount = $downStationNode->getElementsByTagName('UpCount')->item(0)->nodeValue;
@@ -70,8 +70,8 @@ and open the template in the editor.
         }
         
 
-        $arrAbnormalUpCount = [];
-        $arrAbnormalDownCount = [];
+        $arrAbnormalUpCount = array();
+        $arrAbnormalDownCount = array();
         if ($strResult === 'no') {
             $abnormalStationsNode = $classInfoDoc->getElementsByTagName('AbnormalStations')->item(0);
             $abnormalUpStationsNodeList = $abnormalStationsNode->getElementsByTagName('UpStation');

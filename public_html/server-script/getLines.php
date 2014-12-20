@@ -85,7 +85,7 @@ if ($oDir->handle) {
             }
         } else {
             $checker = $checkerNodes->item(0)->getElementsByTagName('Name')->item(0)->nodeValue;
-            $checkResult = $xmlDoc->getElementsByTagName('CheckResult')->item(0)->nodeValue;
+            $checkResult = $xmlDoc->getElementsByTagName('CheckResult')->item(0)->getAttribute('result');
 
             if ($isR) {
                 if ($checkResult === 'yes') {

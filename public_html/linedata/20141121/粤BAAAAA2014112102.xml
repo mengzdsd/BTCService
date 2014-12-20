@@ -67,4 +67,4 @@
             <Price>15</Price>
         </Ticket>
     </Tickets>
-</BusLine>   
+<Checker><Name>tester</Name></Checker><CountInfo><Station><Name>虎门中心站</Name><UpCount>4</UpCount><DownCount>0</DownCount></Station><Station><Name>龙眼</Name><UpCount>3</UpCount><DownCount>0</DownCount></Station><Station><Name>树田</Name><UpCount>1</UpCount><DownCount>0</DownCount></Station><Station><Name>厦岗标志</Name><UpCount>1</UpCount><DownCount>0</DownCount></Station><Station><Name>时代广场</Name><UpCount>0</UpCount><DownCount>1</DownCount></Station><Station><Name>松岗医院</Name><UpCount>0</UpCount><DownCount>2</DownCount></Station><Station><Name>沙井中心站</Name><UpCount>0</UpCount><DownCount>1</DownCount></Station><Station><Name>南头检查站</Name><UpCount>0</UpCount><DownCount>5</DownCount></Station></CountInfo><CheckResult result="no"><AbnormalStations><UpStation><Name>龙眼</Name><MoreCount>1</MoreCount></UpStation></AbnormalStations></CheckResult></BusLine>

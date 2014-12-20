@@ -63,7 +63,7 @@ body {
     margin-left: 10px;
 }
 
-// for page 1
+/* for page 1 */
 #entrance {
     margin-top: 100px;
     display: block;
@@ -73,9 +73,9 @@ body {
     position: relative;
     top: -10px;
 }
-// end page 1
+/* end page 1 */
 
-// for page 2
+/* for page 2 */
 #dateselect{
     margin-top: 10px;
     margin-left: 10px;
@@ -99,9 +99,9 @@ body {
     background-color: #A7C942;
     color: #ffffff;
 }
-// end page 2
+/* end page 2 */
 
-// for page 3
+/* for page 3 */
 table#downCountTalbe {
     border-collapse:collapse;
 }
@@ -115,9 +115,9 @@ table#downCountTalbe {
     width: 50px;
 }
 
-// end page 3
+/* end page 3 */
 
-// common
+/* common */
 .red-color {
     color: red;
 }

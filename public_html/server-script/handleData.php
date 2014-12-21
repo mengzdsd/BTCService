@@ -29,7 +29,7 @@ if ($lineName && $strCounts && $checkerName) {
     $docStation = new DOMDocument();
     $docStation->load($stationsInfoFile);
     $stationNodeList = $docStation->getElementsByTagName('station');
-    $arrStations = []; // used to record the station names
+    $arrStations = array(); // used to record the station names
     foreach ($stationNodeList as $station) {
         $idValue = $station->getAttribute('id');
         $stationName = $station->getElementsByTagName('name')->item(0)->nodeValue;
@@ -39,8 +39,8 @@ if ($lineName && $strCounts && $checkerName) {
     $docClassInfo = new DOMDocument();
     $docClassInfo->load($classInfoFile);
     $ticketsNodeList = $docClassInfo->getElementsByTagName('Ticket');
-    $arrTUC = []; // used to recored the station name and number of up people should be
-    $arrTDC = []; // uesd to recored the station name and number of down people should be
+    $arrTUC = array(); // used to recored the station name and number of up people should be
+    $arrTDC = array(); // uesd to recored the station name and number of down people should be
     foreach ($ticketsNodeList as $ticketNode) {
         $upStation = $ticketNode->getElementsByTagName('UpStation')->item(0)->nodeValue;
         $downStation = $ticketNode->getElementsByTagName('DownStation')->item(0)->nodeValue;
@@ -62,7 +62,7 @@ if ($lineName && $strCounts && $checkerName) {
     }
 
     $arrCounts = explode('#', $strCounts);
-    $arrCountInfos = [];   // used to record the stations and up/down number from vedio check
+    $arrCountInfos = array();   // used to record the stations and up/down number from vedio check
     // ("stationName" => ['upNumber', 'downNumber'])
     for ($i = 0; $i < count($arrCounts); $i++) {
         $sId = 's' . ($i + 1);
@@ -72,8 +72,8 @@ if ($lineName && $strCounts && $checkerName) {
     // Calculate the date from the video and the tickets, and record the abnormal up and down counts
     $comResult = true;
     $expDownCount = 0;
-    $arrAbnormalUpRecord = [];
-    $arrAbnormalDownRecord = []; // used to record exception situation
+    $arrAbnormalUpRecord = array();
+    $arrAbnormalDownRecord = array(); // used to record exception situation
     foreach ($arrCountInfos as $key => $value) {
         if (array_key_exists($key, $arrTUC)) {
             if (intval($value[0]) !== $arrTUC[$key]) {

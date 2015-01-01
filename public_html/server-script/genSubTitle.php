@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 
 /*
@@ -6,9 +7,167 @@
 
 error_reporting(E_ALL);
 
+if ($argc != 5) {
+?>
+Usage:
+<?php echo basename($argv[0]); ?> <Input_srt_file> <Start_video_time> <End_video_time> <Name_of_output_srt>
+
+  Input_srt_file : the path of srt file generated from PDA.
+  Start_video_time : The video start time, format is HH:MM:SS.
+  End_video_time : The video end time, format is HH:MM:SS.
+  Name_of_out_srt : The name of the output srt file.
+
+  Example : <?php echo basename($argv[0]); ?> ~/2015-01-01-test.srt 11:00:04 11:05:56 srtVideo.srt
+
+<?php
+} else {
+  $strCurDir = getcwd();
+  $strIFRealPath = realpath($argv[1]);
+  $strOFRealPath = dirname($strIFRealPath) . DIRECTORY_SEPARATOR . $argv[4];
+  $strVideoStartTime = $argv[2];
+  $strVideoEndTime = $argv[3];
+
+  // Set default timezion to Asia/Chongqing
+  date_default_timezone_set('Asia/Chongqing');
+
+  $rsIF = fopen($strIFRealPath,'r') or die ("Error: Unable to open $strIFRealPath, please check it.");
+
+  if (file_exists($strOFRealPath)) {
+    unlink($strOFRealPath) or die ("Error: $strOFRealPath already exist, and can not remove it.");
+  }
+  $rsOF = fopen($strOFRealPath,'x');
+  if (!$rsOF) {
+    fclose($rsIF);
+    die ("Error: Unable to create $strOutputFilePath to write, please check it.");
+  }
+  
+  $n = 0;
+  $arrSrtSections = array();
+  $arrTempSection = array();
+  while (!feof($rsIF)) {
+    $line = fgets($rsIF);
+    $intLineLength = strlen($line);
+    if ($intLineLength > 0) {
+      if (strlen($line) !== 2) {
+        $arrTempSection[$n] = strTrim($line,"\r\n");
+        $n++;
+      } else {
+        array_push($arrSrtSections,$arrTempSection);
+        $arrTempSection = array();
+        $n = 0;
+      }
+    }
+  }
+  array_push($arrSrtSections,$arrTempSection);
+  unset($arrTempSection);
+  
+  fclose($rsIF);
+
+  $strVideoDate = getDateStr($strIFRealPath);
+  
+  $intVideoStartTimeStamp = getTimeStamp($strVideoDate,$strVideoStartTime);
+  $intVideoEndTimeStamp = getTimeStamp($strVideoDate,$strVideoEndTime);
+  
+  $arrSrtDatas = array();
+  foreach ($arrSrtSections as $arrSrtSection) {
+    $arrTimes = getTimeStamps($strVideoDate,$arrSrtSection[1]);
+    $arrTemp = array($arrTimes[0],$arrTimes[1],$arrSrtSection[2]);
+    array_push($arrSrtDatas,$arrTemp);
+  }
+
+  $intStartN = 0;
+  $intEndN = 0;
+  $intCount = count($arrSrtDatas);
+  if (($intVideoEndTimeStamp <= $arrSrtDatas[0][0]) || ($intVideoStartTimeStamp >= $arrSrtDatas[$intCount-1][1])) {
+    $errorMessage = <<<EOD
+Error: The video's period is not in the period of this srt file.
+(The start time of video later on this srt file end, or the end time of this video early than tis srt file start.)
+
+EOD;
+    die($errorMessage);
+  }
+  
+  for ($i = 0; $i < $intCount; $i++) {
+    if ($intVideoStartTimeStamp < $arrSrtDatas[$i][1]) {
+      $intStartN = $i;
+      break;
+    }
+  }
+  
+  for ($i = 0; $i < $intCount; $i++) {
+    if ($intVideoEndTimeStamp <= $arrSrtDatas[$i][0]) {
+      $intEndN = $i - 1;
+      break;
+    }
+    $intEndN = $i;
+  }
+  
+  if ($intStartN == $intEndN) {
+    $intElapse = $arrSrtDatas[$intStartN][0] - $intVideoStartTimeStamp;
+    $strStartTime = "";
+    $strEndTime = "";
+    if ($intElapse > 0) {
+      $strStartTime = secondsToStr($intElapse);
+    } else {
+      $strStartTime = '00:00:00,000';
+    }
+  
+    $intElapse = $arrSrtDatas[$intEndN][1] - $intVideoEndTimeStamp;
+    if ($intElapse > 0) {
+      $strEndTime = secondsToStr($intVideoEndTimeStamp - $intVideoStartTimeStamp);
+    } else {
+      $strEndTime = secondsToStr($arrSrtDatas[$intEndN][1] - $intVideoStartTimeStamp);
+    }
+  
+    $strTimeLine = $strStartTime . ' --> ' . $strEndTime . "\r\n";
+    fputs($rsOF,"0\r\n");
+    fputs($rsOF,$strTimeLine);
+    fputs($rsOF,$arrSrtDatas[$intStartN][2]);
+  } else {
+    for ($i = $intStartN; $i <=$intEndN; $i++) {
+      $strStartTime = "";
+      $strEndTime = "";
+      if ($i == $intStartN) {
+        $intElapse = $arrSrtDatas[$i][0] - $intVideoStartTimeStamp;
+        if ($intElapse > 0 ) {
+  	$strStartTime = secondsToStr($intElapse);
+        } else {
+  	$strStartTime = '00:00:00,000';
+        }
+        $strEndTime = secondsToStr($arrSrtDatas[$i][1] - $intVideoStartTimeStamp); 
+      } elseif ($i == $intEndN) {
+        $intElapse = $arrSrtDatas[$i][1] - $intVideoEndTimeStamp;
+        if ($intElapse > 0 ) {
+  	$strEndTime = secondsToStr($intVideoEndTimeStamp - $intVideoStartTimeStamp);
+        } else {
+  	$strEndTime = secondsToStr($arrSrtDatas[$i][1] - $intVideoStartTimeStamp);
+        }
+        $strStartTime = secondsToStr($arrSrtDatas[$i][0] - $intVideoStartTimeStamp);
+      } else {
+        $strStartTime = secondsToStr($arrSrtDatas[$i][0] - $intVideoStartTimeStamp);
+        $strEndTime = secondsToStr($arrSrtDatas[$i][1] - $intVideoStartTimeStamp);
+      }
+      $strSeq = ($i - $intStartN) . "\r\n";
+      $strTimeLine = $strStartTime . ' --> ' . $strEndTime . "\r\n";
+      fputs($rsOF,$strSeq);
+      fputs($rsOF,$strTimeLine);
+      fputs($rsOF,$arrSrtDatas[$i][2]);
+      fputs($rsOF,"\r\n\r\n");
+    }
+  }
+  
+  fclose($rsOF);
+  echo "Success : generate $strOFRealPath for video.", PHP_EOL;
+  exit(0);
+}
+?>
+
+<?php	# Functions
 /*
+ * Convert a date time to unix stamp
  * $strDate : YYYY-MM-DD
  * $strTime : hh:mm:ss
+ * return: the seconds of time stamp
  */
 function getTimeStamp($strDate,$strTime) {
   $strDateTime = $strDate . ' ' . $strTime;
@@ -30,6 +189,12 @@ function getTimeStamps($strDate,$strTimes) {
   return array($intTimeStamp1,$intTimeStamp2);
 }
 
+/*
+ * Trim the specified characters in the end of a string
+ * $str : the string need to be trimed
+ * $strTrim : the charaters need to be cut
+ * return: the string after trimed.
+ */
 function strTrim($str,$strTrim) {
   $len = strlen($strTrim);
   if (substr($str,-$len) == $strTrim) {
@@ -41,163 +206,27 @@ function strTrim($str,$strTrim) {
   }
 }
 
+/*
+ * Conver the seconds stamp to the time str the srt file need.
+ * $intSeconds : the seconds from the beginning
+ * return : the string with the format (HH:MM:SS,SSS)
+ */
 function secondsToStr($intSeconds) {
-  return gmdate('H:i:s',$intSeconds) . ',000';
+  return date('H:i:s',$intSeconds) . ',000';
 }
 
-$strInputFilePath = "./test.srt";
-$strOutputFilePath = "output.srt";
-$strVideoStartTime = "11:00:04";
-$strVideoEndTime = "11:05:56";
-$strVideoDate = "2014-12-30";
-
-$strIFRealPath = realpath($strInputFilePath);
-$strOFRealPath = realpath($strOutputFilePath);
-# echo $strOFRealPath, PHP_EOL;
-if (file_exists($strOutputFilePath)) {
-  unlink($strOFRealPath) or die ("Error: $strOutputFilePath already exist, and can not remove it.");
-}
-
-$rsIF = fopen($strIFRealPath,'r') or die ("Error: Unable to open $strInputFilePath, please check it.");
-$rsOF = fopen($strOutputFilePath,'x');
-if (!$rsOF) {
-  fclose($rsIF);
-  die ("Error: Unable to create $strOutputFilePath, please check it.");
-}
-
-$n = 0;
-$arrSrtSections = array();
-$arrTempSection = array();
-while (!feof($rsIF)) {
-#  fputs($rsOF,fgets($rsIF));
-  $line = fgets($rsIF);
-  $intLineLength = strlen($line);
-  if ($intLineLength > 0) {
-    if (strlen($line) !== 2) {
-#      echo $n . ': ' . $line;
-      $arrTempSection[$n] = strTrim($line,"\r\n");
-      $n++;
-    } else {
-#      echo "--------------------", PHP_EOL;
-      array_push($arrSrtSections,$arrTempSection);
-      $arrTempSection = array();
-      $n = 0;
-    }
-  }
-}
-array_push($arrSrtSections,$arrTempSection);
-unset($arrTempSection);
-
-fclose($rsIF);
-print_r($arrSrtSections);
-
-$intVideoStartTimeStamp = getTimeStamp($strVideoDate,$strVideoStartTime);
-$intVideoEndTimeStamp = getTimeStamp($strVideoDate,$strVideoEndTime);
-# echo $intVideoStartTimeStamp, PHP_EOL;
-# echo $intVideoEndTimeStamp, PHP_EOL;
-# 
-# $arrSTs = getTimeStamps($strVideoDate,$arrSrtSections[0][1]);
-# echo $arrSTs[0], PHP_EOL;
-# echo $arrSTs[1], PHP_EOL;
-#
-$intRt = 0;
-$arrSrtDatas = array();
-foreach ($arrSrtSections as $arrSrtSection) {
-  $arrTimes = getTimeStamps($strVideoDate,$arrSrtSection[1]);
-  $arrTemp = array($arrTimes[0],$arrTimes[1],$arrSrtSection[2]);
-  array_push($arrSrtDatas,$arrTemp);
-}
-#print_r($arrSrtDatas);
-$intStartN = 0;
-$intEndN = 0;
-$intCount = count($arrSrtDatas);
-#echo $intCount, PHP_EOL;
-#echo $arrSrtDatas[0][0] . ' - ' . $arrSrtDatas[$intCount-1][1] , PHP_EOL;
-if (($intVideoEndTimeStamp <= $arrSrtDatas[0][0]) || ($intVideoStartTimeStamp >= $arrSrtDatas[$intCount-1][1])) {
-  $errorMessage = <<<EOD
-Error: The video's period is not in the period of this srt file.
-(The start time of video later on this srt file end, or the end time of this video early than tis srt file start.)
-
-EOD;
-  die($errorMessage);
-}
-
-for ($i = 0; $i < $intCount; $i++) {
-#  echo $intVideoStartTimeStamp . ' - ' . $arrSrtDatas[$i][1] , PHP_EOL;
-  if ($intVideoStartTimeStamp < $arrSrtDatas[$i][1]) {
-    $intStartN = $i;
-    break;
-  }
-}
-
-for ($i = 0; $i < $intCount; $i++) {
-#  echo $intVideoEndTimeStamp . ' + ' . $arrSrtDatas[$i][0] , PHP_EOL;
-  if ($intVideoEndTimeStamp <= $arrSrtDatas[$i][0]) {
-    $intEndN = $i - 1;
-    break;
-  }
-  $intEndN = $i;
-}
-
-#echo $intStartN . ' : ' . $intEndN , PHP_EOL;
-#echo secondsToStr(1419937556 - 1419937204) , PHP_EOL;
-
-if ($intStartN == $intEndN) {
-  $intElapse = $arrSrtDatas[$intStartN][0] - $intVideoStartTimeStamp;
-  $strStartTime = "";
-  $strEndTime = "";
-  if ($intElapse > 0) {
-    $strStartTime = secondsToStr($intElapse);
+/*
+ * Get the date string from the input file
+ * $strInputFile : the real path of the input file.
+ * return : the date string with format (YYYY-MM-DD)
+ */
+function getDateStr($strInputFile) {
+  $strFileName = basename($strInputFile);
+  if (preg_match('/\d{4}-\d{2}-\d{2}/', $strFileName, $matches)) {
+    return $matches[0];
   } else {
-    $strStartTime = '00:00:00,000';
-  }
-
-  $intElapse = $arrSrtDatas[$intEndN][1] - $intVideoEndTimeStamp;
-  if ($intElapse > 0) {
-    $strEndTime = secondsToStr($intVideoEndTimeStamp - $intVideoStartTimeStamp);
-  } else {
-    $strEndTime = secondsToStr($arrSrtDatas[$intEndN][1] - $intVideoStartTimeStamp);
-  }
-
-  $strTimeLine = $strStartTime . ' --> ' . $strEndTime . "\r\n";
-  fputs($rsOF,"0\r\n");
-#  echo $strTimeLine;
-  fputs($rsOF,$strTimeLine);
-#  echo $arrSrtDatas[$intStartN][2] . "\r\n";
-  fputs($rsOF,$arrSrtDatas[$intStartN][2]);
-} else {
-  for ($i = $intStartN; $i <=$intEndN; $i++) {
-    $strStartTime = "";
-    $strEndTime = "";
-    if ($i == $intStartN) {
-      $intElapse = $arrSrtDatas[$i][0] - $intVideoStartTimeStamp;
-      if ($intElapse > 0 ) {
-	$strStartTime = secondsToStr($intElapse);
-      } else {
-	$strStartTime = '00:00:00,000';
-      }
-      $strEndTime = secondsToStr($arrSrtDatas[$i][1] - $intVideoStartTimeStamp); 
-    } elseif ($i == $intEndN) {
-      $intElapse = $arrSrtDatas[$i][1] - $intVideoEndTimeStamp;
-      if ($intElapse > 0 ) {
-	$strEndTime = secondsToStr($intVideoEndTimeStamp - $intVideoStartTimeStamp);
-      } else {
-	$strEndTime = secondsToStr($arrSrtDatas[$i][1] - $intVideoStartTimeStamp);
-      }
-      $strStartTime = secondsToStr($arrSrtDatas[$i][0] - $intVideoStartTimeStamp);
-    } else {
-      $strStartTime = secondsToStr($arrSrtDatas[$i][0] - $intVideoStartTimeStamp);
-      $strEndTime = secondsToStr($arrSrtDatas[$i][1] - $intVideoStartTimeStamp);
-    }
-    $strSeq = ($i - $intStartN) . "\r\n";
-    $strTimeLine = $strStartTime . ' --> ' . $strEndTime . "\r\n";
-    fputs($rsOF,$strSeq);
-#    echo $strTimeLine;
-    fputs($rsOF,$strTimeLine);
-#    echo $arrSrtDatas[$i][2] . "\r\n";
-    fputs($rsOF,$arrSrtDatas[$i][2]);
-    fputs($rsOF,"\r\n\r\n");
+    return date('Y-m-d', filemtime($strInputFile));
   }
 }
 
-fclose($rsOF);
+?>

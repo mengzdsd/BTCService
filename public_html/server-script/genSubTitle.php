@@ -212,7 +212,9 @@ function strTrim($str,$strTrim) {
  * return : the string with the format (HH:MM:SS,SSS)
  */
 function secondsToStr($intSeconds) {
-  return date('H:i:s',$intSeconds) . ',000';
+  date_default_timezone_set('UTC');
+  $strTime = date('H:i:s',$intSeconds) . ',000';
+  return $strTime;
 }
 
 /*
